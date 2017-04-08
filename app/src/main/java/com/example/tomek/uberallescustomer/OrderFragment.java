@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -29,9 +30,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 
 import java.io.IOException;
 import java.util.List;
+
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
 
 
 /**
@@ -122,7 +127,7 @@ public class OrderFragment extends Fragment {
         FloatingActionButton fabAddLocation = (FloatingActionButton) rootView.findViewById(R.id.fab_add_location);
         final EditText startPosition = (EditText) rootView.findViewById(R.id.start_point_edit_text);
         final EditText destinantionPosition = (EditText) rootView.findViewById(R.id.descination_point_edit_text);
-        
+
         myLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,47 +148,58 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        fabAddLocation.setOnClickListener(new View.OnClickListener() {
+        fabAddLocation.setOnClickListener(new View.OnClickListener()
+
+        {
+
             @Override
             public void onClick(View v) {
-                String startLocation = startPosition.getText().toString();
-                String destinationLocation = destinantionPosition.getText().toString();
+                String startLocation = getLocation(startPosition);
+                String destinationLocation = getLocation(destinantionPosition);
                 List<Address> addressList = null;
                 List<Address> addressList1 = null;
 
-                if(startLocation!=null){
+                if (startLocation != null) {
                     Geocoder geocoder = new Geocoder(rootView.getContext());
                     try {
-                        addressList = geocoder.getFromLocationName(startLocation,1);
+                        addressList = geocoder.getFromLocationName(startLocation, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    android.location.Address address = addressList.get(0);
-                    LatLng latLng =  new LatLng(address.getLatitude(), address.getLongitude());
+                    Address address = addressList.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
                     googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
                 }
 
-                if(destinationLocation!=null || !destinationLocation.equals("")){
+                if (destinationLocation != null || !destinationLocation.equals("")) {
                     Geocoder geocoder = new Geocoder(rootView.getContext());
                     try {
-                        addressList1 = geocoder.getFromLocationName(destinationLocation,1);
+                        addressList1 = geocoder.getFromLocationName(destinationLocation, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    android.location.Address address = addressList1.get(0);
-                    LatLng latLng =  new LatLng(address.getLatitude(), address.getLongitude());
+                    Address address = addressList1.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
                     googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                 }
             }
         });
 
+    }
 
-
+    private String getLocation(EditText locationField) {
+        String location = null;
+        try {
+            location = locationField.getText().toString();
+        } catch (NullPointerException emptyField) {
+            makeText(getActivity().getApplicationContext(), "Enter any value", LENGTH_SHORT).show();
+        }
+        return location;
     }
 
 
