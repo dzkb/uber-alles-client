@@ -1,6 +1,9 @@
 package com.example.tomek.uberallescustomer;
 
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -11,12 +14,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
@@ -33,6 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -44,11 +53,8 @@ import static android.widget.Toast.makeText;
  */
 public class OrderFragment extends Fragment {
 
-
     MapView mapView;
-
     private View rootView;
-
     private GoogleMap googleMap;
 
     public OrderFragment() {
@@ -127,6 +133,7 @@ public class OrderFragment extends Fragment {
         FloatingActionButton fabAddLocation = (FloatingActionButton) rootView.findViewById(R.id.fab_add_location);
         final EditText startPosition = (EditText) rootView.findViewById(R.id.start_point_edit_text);
         final EditText destinantionPosition = (EditText) rootView.findViewById(R.id.descination_point_edit_text);
+        final TextView journeyTime = (TextView) rootView.findViewById(R.id.time);
 
         myLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +152,15 @@ public class OrderFragment extends Fragment {
                 googleMap.getUiSettings().setMyLocationButtonEnabled(false);
                 googleMap.setMyLocationEnabled(true);
 
+            }
+        });
+
+        journeyTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerFragment newFragment = new TimePickerFragment();
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+                newFragment.journeyTime = journeyTime;
             }
         });
 
@@ -202,5 +218,26 @@ public class OrderFragment extends Fragment {
         return location;
     }
 
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
 
+        int hour, minute;
+        TextView journeyTime;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            hour = c.get(Calendar.HOUR_OF_DAY);
+            minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            journeyTime.setText(hourOfDay + ":" + minute);
+        }
+    }
 }

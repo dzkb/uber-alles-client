@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tomek.uberallescustomer.FirebaseCouldMessaging.InstanceIdService;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -23,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.forgot_password_text)
     public void onForgotPasswordTextClick(View v) {
+        new InstanceIdService().onTokenRefresh();
         Toast.makeText(this, "Forgot password implementation", Toast.LENGTH_SHORT).show();
     }
 
