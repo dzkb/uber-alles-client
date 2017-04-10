@@ -90,6 +90,7 @@
                 android:layout_toRightOf="@+id/watch"
                 android:background="@android:color/white"
                 android:hint="@string/set_time"
+                android:editable="false"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/black" />
 
