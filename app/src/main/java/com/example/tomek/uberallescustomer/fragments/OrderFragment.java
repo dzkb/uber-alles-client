@@ -1,16 +1,12 @@
-package com.example.tomek.uberallescustomer;
+package com.example.tomek.uberallescustomer.fragments;
 
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -26,15 +22,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.maps.CameraUpdate;
+import com.example.tomek.uberallescustomer.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -44,7 +37,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.example.tomek.uberallescustomer.Helper.compareTime;
+import static com.example.tomek.uberallescustomer.utils.Helper.compareTime;
 
 
 /**

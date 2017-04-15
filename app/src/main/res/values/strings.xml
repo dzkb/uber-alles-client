@@ -3,6 +3,10 @@
     <string name="taxi_drive">Taxi Drive</string>
     <string name="email_hint"><font size="15"> Email</font></string>
     <string name="password_hint"><font size="15"> Hasło</font></string>
+    <string name="confirm_password_hint"><font size="15"> Powtórz hasło</font></string>
+    <string name="first_name_hint"><font size="15"> Imię</font></string>
+    <string name="last_name_hint"><font size="15"> Nazwisko</font></string>
+    <string name="phone_number_hint"><font size="15"> Numer telefonu</font></string>
     <string name="password_forgot">Zapomniałeś hasła?</string>
     <string name="login">Zaloguj się</string>
     <string name="sing_up">Stwórz konto</string>
@@ -15,4 +19,5 @@
     <string name="my_location">Podaj miejsce początkowe</string>
     <string name="destination_point">Podaj punkt docelowy</string>
     <string name="set_time">Podaj czas</string>
+    <string name="create_account">Create Account</string>
 </resources>

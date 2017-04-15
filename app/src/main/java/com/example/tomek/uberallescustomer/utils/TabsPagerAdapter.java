@@ -1,9 +1,13 @@
-package com.example.tomek.uberallescustomer;
+package com.example.tomek.uberallescustomer.utils;
 
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.tomek.uberallescustomer.fragments.HistoryFragment;
+import com.example.tomek.uberallescustomer.fragments.OrderFragment;
+import com.example.tomek.uberallescustomer.fragments.SettingsFragment;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter{
 
