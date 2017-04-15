@@ -91,7 +91,8 @@
                 android:background="@android:color/white"
                 android:hint="@string/set_time"
                 android:textColor="@android:color/black"
-                android:textColorHint="@android:color/black" />
+                android:textColorHint="@android:color/black"
+                android:editable="false"/>
 
         </RelativeLayout>
 
