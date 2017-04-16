@@ -1,8 +1,11 @@
 package com.example.tomek.uberallescustomer;
 
 
+<<<<<<< HEAD
 import android.app.DatePickerDialog;
+=======
 import android.app.Activity;
+>>>>>>> master
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -17,7 +20,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+<<<<<<< HEAD
+=======
 import android.support.v4.app.FragmentManager;
+>>>>>>> master
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +33,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+<<<<<<< HEAD
+=======
 import android.widget.Toast;
+>>>>>>> master
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -48,10 +57,12 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+<<<<<<< HEAD
 import static com.example.tomek.uberallescustomer.Helper.compareTime;
-
+=======
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+>>>>>>> master
 
 
 /**
@@ -61,7 +72,10 @@ public class OrderFragment extends Fragment {
 
     MapView mapView;
     private View rootView;
+<<<<<<< HEAD
     public static final String OLD_DATE = "Podaj date z przyszłosci";
+=======
+>>>>>>> master
     private GoogleMap googleMap;
 
     public OrderFragment() {
@@ -140,8 +154,11 @@ public class OrderFragment extends Fragment {
         FloatingActionButton fabAddLocation = (FloatingActionButton) rootView.findViewById(R.id.fab_add_location);
         final EditText startPosition = (EditText) rootView.findViewById(R.id.start_point_edit_text);
         final EditText destinantionPosition = (EditText) rootView.findViewById(R.id.descination_point_edit_text);
+<<<<<<< HEAD
         final TextView time = (TextView) rootView.findViewById(R.id.time);
+=======
         final TextView journeyTime = (TextView) rootView.findViewById(R.id.time);
+>>>>>>> master
 
         myLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +193,10 @@ public class OrderFragment extends Fragment {
                 List<Address> addressList = null;
                 List<Address> addressList1 = null;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
                 if (startLocation != null) {
                     Geocoder geocoder = new Geocoder(rootView.getContext());
                     try {
@@ -185,7 +205,11 @@ public class OrderFragment extends Fragment {
                         e.printStackTrace();
                     }
 
+<<<<<<< HEAD
+                    android.location.Address address = addressList.get(0);
+=======
                     Address address = addressList.get(0);
+>>>>>>> master
                     LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
                     googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -200,7 +224,11 @@ public class OrderFragment extends Fragment {
                         e.printStackTrace();
                     }
 
+<<<<<<< HEAD
+                    android.location.Address address = addressList1.get(0);
+=======
                     Address address = addressList1.get(0);
+>>>>>>> master
                     LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                     googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
                     googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -208,6 +236,7 @@ public class OrderFragment extends Fragment {
             }
         });
 
+<<<<<<< HEAD
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,13 +245,24 @@ public class OrderFragment extends Fragment {
                 date.show(getActivity().getSupportFragmentManager(), "DatePicker");
             }
         });
+=======
+    }
+>>>>>>> master
 
-
+    private String getLocation(EditText locationField) {
+        String location = null;
+        try {
+            location = locationField.getText().toString();
+        } catch (NullPointerException emptyField) {
+            makeText(getActivity().getApplicationContext(), "Enter any value", LENGTH_SHORT).show();
+        }
+        return location;
     }
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
+<<<<<<< HEAD
         static TextView journeyTime;
         static Calendar currentCalendar;
 
@@ -231,10 +271,22 @@ public class OrderFragment extends Fragment {
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
+=======
+        int hour, minute;
+        TextView journeyTime;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            hour = c.get(Calendar.HOUR_OF_DAY);
+            minute = c.get(Calendar.MINUTE);
+>>>>>>> master
 
             // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
+<<<<<<< HEAD
 
         }
 
@@ -285,14 +337,13 @@ public class OrderFragment extends Fragment {
             }
         }
     }
-
-    private String getLocation(EditText locationField) {
-        String location = null;
-        try {
-            location = locationField.getText().toString();
-        } catch (NullPointerException emptyField) {
-            makeText(getActivity().getApplicationContext(), "Enter any value", LENGTH_SHORT).show();
+}
+=======
         }
-        return location;
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            journeyTime.setText(hourOfDay + ":" + minute);
+        }
     }
 }
+>>>>>>> master
