@@ -17,4 +17,10 @@ public class CreateAccount {
     @SerializedName("password")
     public String password;
 
+    public CreateAccount(int phoneNumber, String firstName, String lastName, String password) {
+        this.phoneNumber = phoneNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+    }
 }

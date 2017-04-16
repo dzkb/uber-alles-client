@@ -1,8 +1,10 @@
 package com.example.tomek.uberallescustomer.api;
 
+import com.example.tomek.uberallescustomer.api.pojo.CreateAccount;
 import com.example.tomek.uberallescustomer.api.pojo.User;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -14,5 +16,5 @@ public interface UserService {
     @GET("/users")
     Call<User> basicLogin();
     @POST("/users")
-    Call<User> createAccount();
+    Call<User> createAccount(@Body CreateAccount account);
 }

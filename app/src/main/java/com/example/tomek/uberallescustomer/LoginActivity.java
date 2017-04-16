@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
+import com.example.tomek.uberallescustomer.api.pojo.CreateAccount;
 import com.example.tomek.uberallescustomer.api.pojo.User;
 
 import butterknife.BindView;
@@ -51,17 +52,39 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         request();
     }
-    public void request() {
+    public void requestCreate() {
         UserService loginService =
                 ApiClient.createService(UserService.class, "700800300", "dupa.8");
+        CreateAccount acc = new CreateAccount(884085, "pass","password","password");
+        Call<User> call = loginService.createAccount(acc);
+        call.enqueue(new Callback<User >() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    // user object available
+                    System.out.println("udalo sie");
+                } else {
+                    // error response, no access to resource?
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }
+    public void request() {
+        UserService loginService =
+                ApiClient.createService(UserService.class, "884085", "password");
         Call<User> call = loginService.basicLogin();
         call.enqueue(new Callback<User >() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                System.out.println("on response");
                 if (response.isSuccessful()) {
                     // user object available
-                    System.out.println(response);
+                    System.out.println("udalo sie");
                 } else {
                     // error response, no access to resource?
                 }
