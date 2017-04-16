@@ -3,13 +3,21 @@ package com.example.tomek.uberallescustomer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tomek.uberallescustomer.api.ApiClient;
+import com.example.tomek.uberallescustomer.api.UserService;
+import com.example.tomek.uberallescustomer.api.pojo.User;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,5 +49,29 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        request();
+    }
+    public void request() {
+        UserService loginService =
+                ApiClient.createService(UserService.class, "700800300", "dupa.8");
+        Call<User> call = loginService.basicLogin();
+        call.enqueue(new Callback<User >() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                System.out.println("on response");
+                if (response.isSuccessful()) {
+                    // user object available
+                    System.out.println(response);
+                } else {
+                    // error response, no access to resource?
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.d("Error", t.getMessage());
+            }
+        });
     }
 }
