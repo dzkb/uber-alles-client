@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     public void requestCreate() {
         UserService loginService =
                 ApiClient.createService(UserService.class, "700800300", "dupa.8");
-        CreateAccount acc = new CreateAccount(884085, "pass","password","password");
+        CreateAccount acc = new CreateAccount(884056858, "pashhs","password","password");
         Call<User> call = loginService.createAccount(acc);
         call.enqueue(new Callback<User >() {
             @Override
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void request() {
         UserService loginService =
-                ApiClient.createService(UserService.class, "884085", "password");
+                ApiClient.createService(UserService.class, "884056858", "password");
         Call<User> call = loginService.basicLogin();
         call.enqueue(new Callback<User >() {
             @Override
