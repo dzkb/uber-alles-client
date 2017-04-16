@@ -1,8 +1,12 @@
 package com.example.tomek.uberallescustomer;
 
 
+import android.content.ClipData;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.widget.BottomNavigationView;
 
 import android.support.v4.app.Fragment;
@@ -51,18 +55,14 @@ public class CustomerActivity extends AppCompatActivity {
                             case R.id.action_history:
                                 HistoryFragment historyFragment = new HistoryFragment();
                                 openFragment(historyFragment);
-
-
                                 break;
                             case R.id.action_order:
                                 orderFragment = new OrderFragment();
                                 openFragment(orderFragment);
-
                                 break;
                             case R.id.action_settings:
                                 SettingsFragment settingsFragment = new SettingsFragment();
                                 openFragment(settingsFragment);
-
                                 break;
                             default:
                                 orderFragment = new OrderFragment();
@@ -71,7 +71,8 @@ public class CustomerActivity extends AppCompatActivity {
                         }
                         return true;
                     }
-                });
+                }
+        );
     }
 
 //
@@ -84,4 +85,27 @@ public class CustomerActivity extends AppCompatActivity {
 
     }
 
+    private void checkItem(MenuItem item) {
+        item.setIcon(getResources().getDrawable(R.drawable.ic_local_taxi_yellow_24dp));
+        BottomNavigationItemView m = (BottomNavigationItemView) findViewById(R.id.action_settings);
+        m.setIcon(getResources().getDrawable(R.drawable.ic_settings_black_24dp));
+        m = (BottomNavigationItemView) findViewById(R.id.action_history);
+        m.setIcon(getResources().getDrawable(R.drawable.ic_history_black_24dp));
+        m = (BottomNavigationItemView) findViewById(R.id.action_order);
+        m.setIcon(getResources().getDrawable(R.drawable.ic_local_taxi_black_1_24dp));
+        switch (item.getItemId()) {
+            case R.id.action_history:
+                m = (BottomNavigationItemView) findViewById(R.id.action_history);
+                m.setIcon(getResources().getDrawable(R.drawable.ic_history_yellow_24dp));
+                break;
+            case R.id.action_order:
+                m = (BottomNavigationItemView) findViewById(R.id.action_order);
+                m.setIcon(getResources().getDrawable(R.drawable.ic_local_taxi_yellow_24dp));
+                break;
+            case R.id.action_settings:
+                m = (BottomNavigationItemView) findViewById(R.id.action_settings);
+                m.setIcon(getResources().getDrawable(R.drawable.ic_settings_yellow_24dp));
+                break;
+        }
+    }
 }

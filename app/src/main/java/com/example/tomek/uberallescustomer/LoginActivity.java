@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tomek.uberallescustomer.FirebaseCouldMessaging.InstanceIdService;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
 import com.example.tomek.uberallescustomer.api.pojo.CreateAccount;
@@ -29,7 +30,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     @OnClick(R.id.forgot_password_text)
-    public void onForgotPasswordTextClick(View v){
+    public void onForgotPasswordTextClick(View v) {
+        new InstanceIdService().onTokenRefresh();
         Toast.makeText(this, "Forgot password implementation", Toast.LENGTH_SHORT).show();
     }
 
@@ -40,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.login_button)
-    public void onLoginButtonClick(View v){
+    public void onLoginButtonClick(View v) {
         Intent intent = new Intent(LoginActivity.this, CustomerActivity.class);
         startActivity(intent);
     }
