@@ -21,7 +21,7 @@ public class ApiClient {
     private static Retrofit retrofit = builder.build();
 
     public static <S> S createService(Class<S> serviceClass) {
-        return createService(serviceClass, null, null);
+        return createService(serviceClass, null);
     }
 
     public static <S> S createService(
@@ -29,11 +29,10 @@ public class ApiClient {
         if (!TextUtils.isEmpty(username)
                 && !TextUtils.isEmpty(password)) {
             String authToken = Credentials.basic(username, password);
-            System.out.println("createService "+ authToken);
             return createService(serviceClass, authToken);
         }
 
-        return createService(serviceClass, null, null);
+        return createService(serviceClass, null);
     }
 
     public static <S> S createService(

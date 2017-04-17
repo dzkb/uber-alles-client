@@ -1,14 +1,10 @@
 package com.example.tomek.uberallescustomer;
 
 
-import android.content.ClipData;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.widget.BottomNavigationView;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -41,7 +37,10 @@ public class CustomerActivity extends AppCompatActivity {
 
         orderFragment = new OrderFragment();
         openFragment(orderFragment);
-
+        // znajdzcie na to kurwa lepszy pomysl!!
+//        String phoneNumber = getIntent().getStringExtra("phone_number");
+//        String password = getIntent().getStringExtra("password");
+//        System.out.println("login: " + phoneNumber +password);
 
     }
 

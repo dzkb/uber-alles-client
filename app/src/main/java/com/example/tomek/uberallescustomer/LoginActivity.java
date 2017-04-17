@@ -42,9 +42,13 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.login_button)
     public void onLoginButtonClick(View v) {
-        checkCredentials(
-                phoneNumberEditText.getText().toString(),
-                passwordEditText.getText().toString());
+        String phoneNumber = phoneNumberEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        if(phoneNumber.length() > 0 && password.length() > 0 ) {
+            checkCredentials(phoneNumber, password);
+        } else {
+            Toast.makeText(this, "Podaj dane logowania", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -52,14 +56,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
     }
     public void wrongPasswordToast() {
         Toast.makeText(this, "Nieprawidłowe hasło", Toast.LENGTH_SHORT).show();
     }
     public void checkCredentials(String phoneNumber, String password) {
-        UserService loginService =
+        UserService userService =
                 ApiClient.createService(UserService.class, phoneNumber, password);
-        Call<User> call = loginService.basicLogin();
+        Call<User> call = userService.basicLogin();
         call.enqueue(new Callback<User >() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
