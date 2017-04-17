@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+            android:theme="@style/AppThemeNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,10 +42,10 @@
         </service>
         <activity
             android:name=".CustomerActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/AppThemeNoBar" />
         <activity
             android:name=".SignUpActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:theme="@style/AppThemeNoBar" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAtNNmIXe0AipR6rIjd-ZbmoI1ib8X-KXc" />

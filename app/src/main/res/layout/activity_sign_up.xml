@@ -9,7 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         android:orientation="vertical"
         tools:context="com.example.tomek.uberallescustomer.SignUpActivity"
         android:focusable="true"
@@ -17,8 +17,15 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
+        <ImageView
+            android:layout_width="106dp"
+            android:layout_height="93dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_local_taxi_black_24dp" />
 
         <!--  Name Label -->
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,22 +55,6 @@
                 android:textColor="@android:color/white"
                 android:hint="@string/last_name_hint" />
         </android.support.design.widget.TextInputLayout>
-
-        <!-- Email Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:textColorHint="@android:color/white">
-            <EditText android:id="@+id/edit_text_create_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:textColor="@android:color/white"
-                android:hint="@string/email_hint" />
-        </android.support.design.widget.TextInputLayout>
-
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
