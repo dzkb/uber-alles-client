@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.example.tomek.uberallescustomer.FirebaseCouldMessaging.InstanceIdService;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
-import com.example.tomek.uberallescustomer.api.pojo.CreateAccount;
 import com.example.tomek.uberallescustomer.api.pojo.User;
 
 import butterknife.BindView;
@@ -23,8 +22,8 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    @BindView(R.id.edit_text_email)
-    EditText emailEditText;
+    @BindView(R.id.edit_text_phone_number)
+    EditText phoneNumberEditText;
     @BindView(R.id.edit_text_password)
     EditText passwordEditText;
 
@@ -43,8 +42,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.login_button)
     public void onLoginButtonClick(View v) {
-        Intent intent = new Intent(LoginActivity.this, CustomerActivity.class);
-        startActivity(intent);
+        checkCredentials(
+                phoneNumberEditText.getText().toString(),
+                passwordEditText.getText().toString());
     }
 
     @Override
@@ -52,34 +52,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        request();
     }
-    public void requestCreate() {
-        UserService loginService =
-                ApiClient.createService(UserService.class, "700800300", "dupa.8");
-        CreateAccount acc = new CreateAccount(884056858, "pashhs","password","password");
-        Call<User> call = loginService.createAccount(acc);
-        call.enqueue(new Callback<User >() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    // user object available
-                    System.out.println("udalo sie");
-                } else {
-                    // error response, no access to resource?
-                }
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.d("Error", t.getMessage());
-            }
-        });
+    public void wrongPasswordToast() {
+        Toast.makeText(this, "Nieprawidłowe hasło", Toast.LENGTH_SHORT).show();
     }
-    public void request() {
+    public void checkCredentials(String phoneNumber, String password) {
         UserService loginService =
-                ApiClient.createService(UserService.class, "884056858", "password");
+                ApiClient.createService(UserService.class, phoneNumber, password);
         Call<User> call = loginService.basicLogin();
         call.enqueue(new Callback<User >() {
             @Override
@@ -87,8 +66,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     // user object available
                     System.out.println("udalo sie");
+                    Intent intent = new Intent(LoginActivity.this, CustomerActivity.class);
+                    startActivity(intent);
                 } else {
                     // error response, no access to resource?
+                    wrongPasswordToast();
                 }
             }
 
