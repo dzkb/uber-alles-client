@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     public void wrongPasswordToast() {
-        Toast.makeText(this, "Nieprawidłowe hasło", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.wrong_password, Toast.LENGTH_SHORT).show();
     }
     public void checkCredentials(String phoneNumber, String password) {
         UserService userService =

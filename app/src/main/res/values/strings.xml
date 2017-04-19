@@ -20,4 +20,5 @@
     <string name="destination_point">Podaj punkt docelowy</string>
     <string name="set_time">Podaj czas</string>
     <string name="create_account">Stwórz konto</string>
+    <string name="wrong_password">Nieprawidłowe hasło</string>
 </resources>
