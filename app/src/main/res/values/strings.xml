@@ -21,4 +21,8 @@
     <string name="set_time">Podaj czas</string>
     <string name="create_account">Stwórz konto</string>
     <string name="wrong_password">Nieprawidłowe hasło</string>
+    <string name="confirm_info">Najbliższa taksówka znajdzie się we wskazanej lokalizacji o godzinie: </string>
+    <string name="time_example">12:56</string>
+    <string name="cancel">Anuluj</string>
+    <string name="confirm">Potwierdz</string>
 </resources>
