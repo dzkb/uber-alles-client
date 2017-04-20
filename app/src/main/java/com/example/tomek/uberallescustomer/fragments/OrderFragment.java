@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -170,7 +171,7 @@ public class OrderFragment extends Fragment {
                 List<Address> addressList1 = null;
 
 
-                if (startLocation != null) {
+                if (startLocation != null || !startLocation.equals("")) {
                     Geocoder geocoder = new Geocoder(rootView.getContext());
                     try {
                         addressList = geocoder.getFromLocationName(startLocation, 1);
@@ -178,10 +179,14 @@ public class OrderFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    if (addressList.size() == 0) {
+                        Toast.makeText(getContext(), "Uzupełnij lokalizację startową", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Address address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    }
 
                 }
 
@@ -192,12 +197,21 @@ public class OrderFragment extends Fragment {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-                    Address address = addressList1.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    if (addressList1.size() == 0) {
+                        Toast.makeText(getContext(), "Uzupełnij lokazliację końcową", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Address address = addressList1.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    }
                 }
+
+                if(addressList.size()!=0 && addressList1.size()!=0) {
+                    ConfirmFragment confirmFragment = new ConfirmFragment();
+                    openFragment(confirmFragment);
+                }
+
             }
         });
 
@@ -287,5 +301,13 @@ public class OrderFragment extends Fragment {
             makeText(getActivity().getApplicationContext(), "Enter any value", LENGTH_SHORT).show();
         }
         return location;
+    }
+
+    private void openFragment(final Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+
     }
 }
