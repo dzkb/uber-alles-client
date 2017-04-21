@@ -27,6 +27,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.tomek.uberallescustomer.R;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -58,6 +59,12 @@ public class OrderFragment extends Fragment {
     public static final String OLD_DATE = "Podaj date z przyszłosci";
     private GoogleMap googleMap;
 
+    private FloatingActionButton openNextFragment;
+
+    public static final double WROCLAW_LAT = 51.1078852;
+    public static final double WROCLAW_LNG = 17.0385376;
+
+
     public OrderFragment() {
         // Required empty public constructor
     }
@@ -69,6 +76,9 @@ public class OrderFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_order, container, false);
 
+        initOnClick();
+
+        openNextFragment.setVisibility(View.INVISIBLE);
 
         mapView = initMap();
 
@@ -77,7 +87,7 @@ public class OrderFragment extends Fragment {
         mapView.onResume(); // needed to get the map to display immediately
 
 
-        initOnClick();
+
         return rootView;
     }
 
@@ -120,8 +130,16 @@ public class OrderFragment extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
+                LatLng wroclaw = new LatLng(WROCLAW_LAT,WROCLAW_LNG);
+               // googleMap.animateCamera(CameraUpdateFactory.newLatLng(wroclaw));
+                CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
+                        wroclaw, 12);
+                googleMap.animateCamera(location);
+
             }
         });
+
+
 
         return mapView;
 
@@ -131,11 +149,13 @@ public class OrderFragment extends Fragment {
 
 
         ImageView myLocation = (ImageView) rootView.findViewById(R.id.location_image);
-        FloatingActionButton fabAddLocation = (FloatingActionButton) rootView.findViewById(R.id.fab_add_location);
+        final FloatingActionButton fabAddLocation = (FloatingActionButton) rootView.findViewById(R.id.fab_add_location);
         final EditText startPosition = (EditText) rootView.findViewById(R.id.start_point_edit_text);
         final EditText destinantionPosition = (EditText) rootView.findViewById(R.id.descination_point_edit_text);
         final TextView time = (TextView) rootView.findViewById(R.id.time);
         final TextView journeyTime = (TextView) rootView.findViewById(R.id.time);
+
+        openNextFragment = (FloatingActionButton) rootView.findViewById(R.id.fab_open_next_fragment);
 
         myLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,13 +194,13 @@ public class OrderFragment extends Fragment {
                 if (startLocation != null || !startLocation.equals("")) {
                     Geocoder geocoder = new Geocoder(rootView.getContext());
                     try {
-                        addressList = geocoder.getFromLocationName(startLocation, 1);
+                        addressList = geocoder.getFromLocationName("Wrocław "+startLocation, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    if (addressList.size() == 0) {
-                        Toast.makeText(getContext(), "Uzupełnij lokalizację startową", Toast.LENGTH_SHORT).show();
+                    if (startLocation==null||startLocation.equals("")||destinationLocation==null||destinationLocation.equals("")) {
+                        Toast.makeText(getContext(), "Uzupełnij lokalizację ", Toast.LENGTH_SHORT).show();
                     } else {
                         Address address = addressList.get(0);
                         LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
@@ -190,15 +210,15 @@ public class OrderFragment extends Fragment {
 
                 }
 
-                if (destinationLocation != null || !destinationLocation.equals("")) {
+                if (destinationLocation!=null||!destinationLocation.equals("")) {
                     Geocoder geocoder = new Geocoder(rootView.getContext());
                     try {
-                        addressList1 = geocoder.getFromLocationName(destinationLocation, 1);
+                        addressList1 = geocoder.getFromLocationName("Wrocław "+destinationLocation, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (addressList1.size() == 0) {
-                        Toast.makeText(getContext(), "Uzupełnij lokazliację końcową", Toast.LENGTH_SHORT).show();
+                    if (destinationLocation==null||destinationLocation.equals("")||startLocation==null||startLocation.equals("")) {
+                        Toast.makeText(getContext(), "Uzupełnij lokazliację ", Toast.LENGTH_SHORT).show();
                     } else {
                         Address address = addressList1.get(0);
                         LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
@@ -207,9 +227,10 @@ public class OrderFragment extends Fragment {
                     }
                 }
 
-                if(addressList.size()!=0 && addressList1.size()!=0) {
-                    ConfirmFragment confirmFragment = new ConfirmFragment();
-                    openFragment(confirmFragment);
+                if(destinationLocation!=null&&!destinationLocation.equals("")&&startLocation!=null&&!startLocation.equals("")) {
+                    fabAddLocation.setVisibility(View.INVISIBLE);
+                    openNextFragment.setVisibility(View.VISIBLE);
+
                 }
 
             }
@@ -221,6 +242,14 @@ public class OrderFragment extends Fragment {
                 DatePickerFragment date = new DatePickerFragment();
                 date.journeyTime = time;
                 date.show(getActivity().getSupportFragmentManager(), "DatePicker");
+            }
+        });
+
+        openNextFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConfirmFragment confirmFragment = new ConfirmFragment();
+                openFragment(confirmFragment);
             }
         });
 
