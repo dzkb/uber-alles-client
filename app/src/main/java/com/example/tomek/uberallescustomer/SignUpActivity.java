@@ -41,15 +41,15 @@ public class SignUpActivity extends AppCompatActivity {
         String firstName = editTextCreateFirstName.getText().toString();
         String lastName = editTextCreateLastName.getText().toString();
         if (password.equals(editTextCreateConfirmPassword.getText().toString())) {
-           if (phoneNumber.length() > 0 &&
-                   firstName.length() > 0 &&
-                   lastName.length() > 0 &&
-                   password.length() > 0) {
-               CreateAccount account = new CreateAccount(Integer.parseInt(phoneNumber), firstName, lastName, password);
-               createAccount(account);
-           } else {
-               Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show();
-           }
+            if (phoneNumber.length() > 0 &&
+                    firstName.length() > 0 &&
+                    lastName.length() > 0 &&
+                    password.length() > 0) {
+                CreateAccount account = new CreateAccount(Integer.parseInt(phoneNumber), firstName, lastName, password);
+                createAccount(account);
+            } else {
+                Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -60,13 +60,13 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
     }
+
     public void createAccount(CreateAccount account) {
-        UserService loginService =
-                ApiClient.createService(UserService.class);
+        UserService loginService = ApiClient.createService(UserService.class);
         Call<User> call = loginService.createAccount(account);
-        final String phoneNumber= account.phoneNumber.toString();
-        final String password= account.password;
-        call.enqueue(new Callback<User >() {
+        final String phoneNumber = account.phoneNumber.toString();
+        final String password = account.password;
+        call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {

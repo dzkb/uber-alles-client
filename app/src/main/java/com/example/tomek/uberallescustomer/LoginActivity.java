@@ -20,6 +20,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
+
 public class LoginActivity extends AppCompatActivity {
 
     @BindView(R.id.edit_text_phone_number)
@@ -61,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     public void wrongPasswordToast() {
         Toast.makeText(this, R.string.wrong_password, Toast.LENGTH_SHORT).show();
     }
-    public void checkCredentials(String phoneNumber, String password) {
+    public void checkCredentials(String phoneNumber, final String password) {
         UserService userService =
                 ApiClient.createService(UserService.class, phoneNumber, password);
         Call<User> call = userService.basicLogin();
@@ -69,7 +74,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    // user object available
+                    USER_NAME = response.body().firstName;
+                    USER_SURNAME = response.body().lastName;
+                    USER_PHONE = response.body().phoneNumber;
+                    USER_PASSWORD = password;
                     System.out.println("udalo sie");
                     Intent intent = new Intent(LoginActivity.this, CustomerActivity.class);
                     startActivity(intent);
