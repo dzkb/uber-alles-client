@@ -49,7 +49,7 @@
             android:theme="@style/AppThemeNoBar" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAtNNmIXe0AipR6rIjd-ZbmoI1ib8X-KXc" />
+            android:value="AIzaSyCcQtUaS8rAI9k8pqPFVa-qI7CwRIJFWNw" />
 
 
     </application>
