@@ -37,10 +37,6 @@ public class CustomerActivity extends AppCompatActivity {
 
         orderFragment = new OrderFragment();
         openFragment(orderFragment);
-        // znajdzcie na to kurwa lepszy pomysl!!
-//        String phoneNumber = getIntent().getStringExtra("phone_number");
-//        String password = getIntent().getStringExtra("password");
-//        System.out.println("login: " + phoneNumber +password);
 
     }
 
@@ -73,8 +69,6 @@ public class CustomerActivity extends AppCompatActivity {
                 }
         );
     }
-
-//
 
     private void openFragment(final Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

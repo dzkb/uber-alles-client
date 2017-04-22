@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.example.tomek.uberallescustomer.fragments.DriverInformationFragment;
 import com.example.tomek.uberallescustomer.fragments.SummaryMapFragment;
 
-public class CustomPagerAdapter extends FragmentPagerAdapter{
+public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     int tabCount;
 
@@ -19,11 +19,10 @@ public class CustomPagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        switch(position){
+        switch (position) {
             case 0:
                 SummaryMapFragment summaryMapFragment = new SummaryMapFragment();
                 return summaryMapFragment;
-
             case 1:
                 DriverInformationFragment driverInformationFragment = new DriverInformationFragment();
                 return driverInformationFragment;

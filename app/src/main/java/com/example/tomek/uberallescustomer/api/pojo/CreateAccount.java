@@ -2,9 +2,6 @@ package com.example.tomek.uberallescustomer.api.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Krystian on 2017-04-16.
- */
 
 public class CreateAccount {
 

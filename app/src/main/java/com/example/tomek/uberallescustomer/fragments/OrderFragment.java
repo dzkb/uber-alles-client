@@ -2,7 +2,6 @@ package com.example.tomek.uberallescustomer.fragments;
 
 
 import android.app.DatePickerDialog;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.pm.PackageManager;
@@ -35,14 +34,21 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.StreetViewPanoramaCamera;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
+import static com.example.tomek.uberallescustomer.utils.Helper.compareDate;
 import static com.example.tomek.uberallescustomer.utils.Helper.compareTime;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -58,6 +64,8 @@ public class OrderFragment extends Fragment {
     private View rootView;
     public static final String OLD_DATE = "Podaj date z przyszłosci";
     private GoogleMap googleMap;
+    private Address startAddress = null;
+    private Address endAddress = null;
 
     private FloatingActionButton openNextFragment;
 
@@ -85,7 +93,6 @@ public class OrderFragment extends Fragment {
 
         mapView.onCreate(savedInstanceState);
         mapView.onResume(); // needed to get the map to display immediately
-
 
 
         return rootView;
@@ -130,15 +137,14 @@ public class OrderFragment extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                LatLng wroclaw = new LatLng(WROCLAW_LAT,WROCLAW_LNG);
-               // googleMap.animateCamera(CameraUpdateFactory.newLatLng(wroclaw));
+                LatLng wroclaw = new LatLng(WROCLAW_LAT, WROCLAW_LNG);
+                // googleMap.animateCamera(CameraUpdateFactory.newLatLng(wroclaw));
                 CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
                         wroclaw, 12);
                 googleMap.animateCamera(location);
 
             }
         });
-
 
 
         return mapView;
@@ -153,7 +159,6 @@ public class OrderFragment extends Fragment {
         final EditText startPosition = (EditText) rootView.findViewById(R.id.start_point_edit_text);
         final EditText destinantionPosition = (EditText) rootView.findViewById(R.id.descination_point_edit_text);
         final TextView time = (TextView) rootView.findViewById(R.id.time);
-        final TextView journeyTime = (TextView) rootView.findViewById(R.id.time);
 
         openNextFragment = (FloatingActionButton) rootView.findViewById(R.id.fab_open_next_fragment);
 
@@ -170,14 +175,14 @@ public class OrderFragment extends Fragment {
             }
         });
 
-        journeyTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerFragment newFragment = new TimePickerFragment();
-                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
-                newFragment.journeyTime = journeyTime;
-            }
-        });
+//        journeyTime.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                TimePickerFragment newFragment = new TimePickerFragment();
+//                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+//                newFragment.journeyTime = journeyTime;
+//            }
+//        });
 
         fabAddLocation.setOnClickListener(new View.OnClickListener()
 
@@ -194,40 +199,40 @@ public class OrderFragment extends Fragment {
                 if (startLocation != null || !startLocation.equals("")) {
                     Geocoder geocoder = new Geocoder(rootView.getContext());
                     try {
-                        addressList = geocoder.getFromLocationName("Wrocław "+startLocation, 1);
+                        addressList = geocoder.getFromLocationName("Wrocław " + startLocation, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    if (startLocation==null||startLocation.equals("")||destinationLocation==null||destinationLocation.equals("")) {
+                    if (startLocation == null || startLocation.equals("") || destinationLocation == null || destinationLocation.equals("")) {
                         Toast.makeText(getContext(), "Uzupełnij lokalizację ", Toast.LENGTH_SHORT).show();
                     } else {
-                        Address address = addressList.get(0);
-                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        startAddress = addressList.get(0);
+                        LatLng latLng = new LatLng(startAddress.getLatitude(), startAddress.getLongitude());
                         googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                     }
 
                 }
 
-                if (destinationLocation!=null||!destinationLocation.equals("")) {
+                if (destinationLocation != null || !destinationLocation.equals("")) {
                     Geocoder geocoder = new Geocoder(rootView.getContext());
                     try {
-                        addressList1 = geocoder.getFromLocationName("Wrocław "+destinationLocation, 1);
+                        addressList1 = geocoder.getFromLocationName("Wrocław " + destinationLocation, 1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (destinationLocation==null||destinationLocation.equals("")||startLocation==null||startLocation.equals("")) {
+                    if (destinationLocation == null || destinationLocation.equals("") || startLocation == null || startLocation.equals("")) {
                         Toast.makeText(getContext(), "Uzupełnij lokazliację ", Toast.LENGTH_SHORT).show();
                     } else {
-                        Address address = addressList1.get(0);
-                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        endAddress = addressList1.get(0);
+                        LatLng latLng = new LatLng(endAddress.getLatitude(), endAddress.getLongitude());
                         googleMap.addMarker(new MarkerOptions().position(latLng).title(startLocation));
                         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                     }
                 }
 
-                if(destinationLocation!=null&&!destinationLocation.equals("")&&startLocation!=null&&!startLocation.equals("")) {
+                if (destinationLocation != null && !destinationLocation.equals("") && startLocation != null && !startLocation.equals("")) {
                     fabAddLocation.setVisibility(View.INVISIBLE);
                     openNextFragment.setVisibility(View.VISIBLE);
 
@@ -249,6 +254,15 @@ public class OrderFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ConfirmFragment confirmFragment = new ConfirmFragment();
+                Bundle bundle = new Bundle();
+                bundle.putDouble("StartLat", startAddress.getLatitude());
+                bundle.putDouble("StartLong", startAddress.getLongitude());
+                bundle.putDouble("EndLat", endAddress.getLatitude());
+                bundle.putDouble("EndLong", endAddress.getLongitude());
+                bundle.putString("name", USER_NAME + " " + USER_SURNAME);
+                bundle.putInt("phone", USER_PHONE);
+                bundle.putString("time", getFareDateISO8601());
+                confirmFragment.setArguments(bundle);
                 openFragment(confirmFragment);
             }
         });
@@ -260,7 +274,7 @@ public class OrderFragment extends Fragment {
             implements TimePickerDialog.OnTimeSetListener {
 
         static TextView journeyTime;
-        static Calendar currentCalendar;
+        static Calendar givenCalendar;
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -277,14 +291,20 @@ public class OrderFragment extends Fragment {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-            currentCalendar.set(Calendar.MINUTE, minute);
-            currentCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            givenCalendar.set(Calendar.MINUTE, minute);
+            givenCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             Calendar c = Calendar.getInstance();
-            if (compareTime(currentCalendar, c)) {
-                final StringBuilder sb = new StringBuilder(journeyTime.getText().length());
-                sb.append(journeyTime.getText());
-                journeyTime.setText(sb.toString() + StringUtils.leftPad(Integer.toString(hourOfDay), 2, '0') + ":" + StringUtils.leftPad(Integer.toString(minute), 2, '0'));
-            } else journeyTime.setText(OLD_DATE);
+            if (compareDate(givenCalendar, c) == 0) {
+                if (compareTime(givenCalendar, c)) {
+                    setEditText(hourOfDay, minute);
+                } else journeyTime.setText(OLD_DATE);
+            } else setEditText(hourOfDay, minute);
+        }
+
+        private void setEditText(int hourOfDay, int minute) {
+            final StringBuilder sb = new StringBuilder(journeyTime.getText().length());
+            sb.append(journeyTime.getText());
+            journeyTime.setText(sb.toString() + StringUtils.leftPad(Integer.toString(hourOfDay), 2, '0') + ":" + StringUtils.leftPad(Integer.toString(minute), 2, '0'));
         }
     }
 
@@ -300,7 +320,6 @@ public class OrderFragment extends Fragment {
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
@@ -310,16 +329,17 @@ public class OrderFragment extends Fragment {
             Calendar current = Calendar.getInstance();
             Calendar validDate = Calendar.getInstance();
             validDate.set(givenYear, givenMonth, givenDay);
-            if (current.after(validDate)) {
-                journeyTime.setText(OLD_DATE);
-            } else {
+            if (compareDate(validDate, current) >= 0) {
                 TimePickerFragment.journeyTime = journeyTime;
-                TimePickerFragment.currentCalendar = validDate;
+                TimePickerFragment.givenCalendar = validDate;
                 journeyTime.setText(StringUtils.leftPad(Integer.toString(givenDay), 2, '0') + "/" + StringUtils.leftPad(Integer.toString(givenMonth), 2, '0') + " ");
                 TimePickerFragment timePicker = new TimePickerFragment();
                 timePicker.show(getActivity().getSupportFragmentManager(), "timePicker");
+            } else {
+                journeyTime.setText(OLD_DATE);
             }
         }
+
     }
 
     private String getLocation(EditText locationField) {
@@ -338,5 +358,14 @@ public class OrderFragment extends Fragment {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
 
+    }
+
+    private static String getFareDateISO8601() {
+        Date date = new Date(TimePickerFragment.givenCalendar.getTimeInMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", new Locale("pl"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        String dateString = dateFormat.format(date);
+        dateString = dateString.substring(0, dateString.length() - 1) + "+01:00";
+        return dateString;
     }
 }
