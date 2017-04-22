@@ -22,5 +22,5 @@ public interface UserService {
     @POST("/fares")
     Call<FareProof> createFare(@Body Fare fare);
     @DELETE("/fares/{fareId}")
-    Call<Fare> deleteFare(@Path("id") String itemId);
+    Call<Fare> deleteFare(@Path("fareId") String fareId);
 }

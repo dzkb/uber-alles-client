@@ -85,6 +85,7 @@ public class ConfirmFragment extends Fragment {
             public void onResponse(Call<FareProof> call, Response<FareProof> response) {
                 if (response.isSuccessful()) {
                     ACTIVE_FARE_ID = response.body().getId();
+                    Log.d("OK", "Wszystko spoko - " + ACTIVE_FARE_ID);
                 } else {
                     Log.d("Error", "Coś poszło nie tak . . .");
                 }

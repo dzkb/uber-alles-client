@@ -48,6 +48,7 @@ import java.util.TimeZone;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
+import static com.example.tomek.uberallescustomer.utils.Helper.compareDate;
 import static com.example.tomek.uberallescustomer.utils.Helper.compareTime;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -158,7 +159,6 @@ public class OrderFragment extends Fragment {
         final EditText startPosition = (EditText) rootView.findViewById(R.id.start_point_edit_text);
         final EditText destinantionPosition = (EditText) rootView.findViewById(R.id.descination_point_edit_text);
         final TextView time = (TextView) rootView.findViewById(R.id.time);
-        final TextView journeyTime = (TextView) rootView.findViewById(R.id.time);
 
         openNextFragment = (FloatingActionButton) rootView.findViewById(R.id.fab_open_next_fragment);
 
@@ -274,7 +274,7 @@ public class OrderFragment extends Fragment {
             implements TimePickerDialog.OnTimeSetListener {
 
         static TextView journeyTime;
-        static Calendar currentCalendar;
+        static Calendar givenCalendar;
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -291,14 +291,20 @@ public class OrderFragment extends Fragment {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-            currentCalendar.set(Calendar.MINUTE, minute);
-            currentCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            givenCalendar.set(Calendar.MINUTE, minute);
+            givenCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             Calendar c = Calendar.getInstance();
-            if (compareTime(currentCalendar, c)) {
-                final StringBuilder sb = new StringBuilder(journeyTime.getText().length());
-                sb.append(journeyTime.getText());
-                journeyTime.setText(sb.toString() + StringUtils.leftPad(Integer.toString(hourOfDay), 2, '0') + ":" + StringUtils.leftPad(Integer.toString(minute), 2, '0'));
-            } else journeyTime.setText(OLD_DATE);
+            if (compareDate(givenCalendar, c) == 0) {
+                if (compareTime(givenCalendar, c)) {
+                    setEditText(hourOfDay, minute);
+                } else journeyTime.setText(OLD_DATE);
+            } else setEditText(hourOfDay, minute);
+        }
+
+        private void setEditText(int hourOfDay, int minute) {
+            final StringBuilder sb = new StringBuilder(journeyTime.getText().length());
+            sb.append(journeyTime.getText());
+            journeyTime.setText(sb.toString() + StringUtils.leftPad(Integer.toString(hourOfDay), 2, '0') + ":" + StringUtils.leftPad(Integer.toString(minute), 2, '0'));
         }
     }
 
@@ -314,7 +320,6 @@ public class OrderFragment extends Fragment {
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
@@ -324,16 +329,17 @@ public class OrderFragment extends Fragment {
             Calendar current = Calendar.getInstance();
             Calendar validDate = Calendar.getInstance();
             validDate.set(givenYear, givenMonth, givenDay);
-            if (current.after(validDate)) {
-                journeyTime.setText(OLD_DATE);
-            } else {
+            if (compareDate(validDate, current) >= 0) {
                 TimePickerFragment.journeyTime = journeyTime;
-                TimePickerFragment.currentCalendar = validDate;
+                TimePickerFragment.givenCalendar = validDate;
                 journeyTime.setText(StringUtils.leftPad(Integer.toString(givenDay), 2, '0') + "/" + StringUtils.leftPad(Integer.toString(givenMonth), 2, '0') + " ");
                 TimePickerFragment timePicker = new TimePickerFragment();
                 timePicker.show(getActivity().getSupportFragmentManager(), "timePicker");
+            } else {
+                journeyTime.setText(OLD_DATE);
             }
         }
+
     }
 
     private String getLocation(EditText locationField) {
@@ -355,7 +361,7 @@ public class OrderFragment extends Fragment {
     }
 
     private static String getFareDateISO8601() {
-        Date date = new Date(TimePickerFragment.currentCalendar.getTimeInMillis());
+        Date date = new Date(TimePickerFragment.givenCalendar.getTimeInMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", new Locale("pl"));
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
         String dateString = dateFormat.format(date);
