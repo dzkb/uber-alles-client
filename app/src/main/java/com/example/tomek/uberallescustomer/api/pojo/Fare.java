@@ -46,4 +46,24 @@ public class Fare {
     public void setStartingDate(String startingDate) {
         this.startingDate = startingDate;
     }
+
+    public Point getStartingPoint() {
+        return startingPoint;
+    }
+
+    public Point getEndingPoint() {
+        return endingPoint;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public Integer getClientPhone() {
+        return clientPhone;
+    }
+
+    public String getStartingDate() {
+        return startingDate;
+    }
 }

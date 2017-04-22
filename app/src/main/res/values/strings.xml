@@ -36,4 +36,7 @@
     <string name="phone_number">Numer telefonu</string>
     <string name="example_phone_number">070 088 007</string>
     <string name="cancel_fares">Anuluj przejazd</string>
+    <string name="fares_history">Historia przejazdów</string>
+    <string name="sum">Suma:</string>
+    <string name="line">__________________________</string>
 </resources>
