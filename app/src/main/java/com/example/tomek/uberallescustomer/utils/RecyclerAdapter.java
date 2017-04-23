@@ -1,6 +1,11 @@
 package com.example.tomek.uberallescustomer.utils;
 
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.tomek.uberallescustomer.DetailsActivity;
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
+import com.example.tomek.uberallescustomer.fragments.FareDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +25,10 @@ import java.util.List;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     ArrayList<Fare> faresList;
-
-    public RecyclerAdapter(ArrayList<Fare> faresList) {
+    Activity activity;
+    public RecyclerAdapter(ArrayList<Fare> faresList, Activity activity) {
         this.faresList = faresList;
+        this.activity = activity;
     }
 
     @Override
@@ -41,12 +49,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.startPoint.setText( String.valueOf((fare.getStartingPoint().getLatitude() +", "+ fare.getStartingPoint().getLongitude())));
         holder.destinationPoint.setText(String.valueOf((fare.getEndingPoint().getLatitude() +", "+ fare.getEndingPoint().getLongitude())));
         holder.date.setText(fare.getStartingDate());
+
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, DetailsActivity.class);
+                activity.startActivity(intent);
+
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return faresList.size();
     }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
