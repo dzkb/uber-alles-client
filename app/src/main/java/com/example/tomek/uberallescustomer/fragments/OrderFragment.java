@@ -175,15 +175,6 @@ public class OrderFragment extends Fragment {
             }
         });
 
-//        journeyTime.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                TimePickerFragment newFragment = new TimePickerFragment();
-//                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
-//                newFragment.journeyTime = journeyTime;
-//            }
-//        });
-
         fabAddLocation.setOnClickListener(new View.OnClickListener()
 
         {

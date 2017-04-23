@@ -1,11 +1,8 @@
 package com.example.tomek.uberallescustomer.utils;
 
-
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,19 +14,24 @@ import com.example.tomek.uberallescustomer.DetailsActivity;
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
-import com.example.tomek.uberallescustomer.fragments.FareDetailFragment;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static com.example.tomek.uberallescustomer.LogedUserData.ACTIVE_FARE_ID;
+import static com.example.tomek.uberallescustomer.LogedUserData.FARES_LIST;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     ArrayList<Fare> faresList;
     Activity activity;
+
     public RecyclerAdapter(ArrayList<Fare> faresList, Activity activity) {
         this.faresList = faresList;
         this.activity = activity;
     }
+
 
     @Override
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -43,20 +45,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, int position) {
 
-        Fare fare = faresList.get(position);
+        final Fare fare = faresList.get(position);
         Point startPoint = fare.getStartingPoint();
         Point destinationPoint = fare.getEndingPoint();
-        holder.startPoint.setText( String.valueOf((fare.getStartingPoint().getLatitude() +", "+ fare.getStartingPoint().getLongitude())));
-        holder.destinationPoint.setText(String.valueOf((fare.getEndingPoint().getLatitude() +", "+ fare.getEndingPoint().getLongitude())));
+        holder.startPoint.setText(String.valueOf((startPoint.getLatitude() + ", " + startPoint.getLongitude())));
+        holder.destinationPoint.setText(String.valueOf((destinationPoint.getLatitude() + ", " + destinationPoint.getLongitude())));
         holder.date.setText(fare.getStartingDate());
-
-
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ACTIVE_FARE_ID = getKeyByValue(FARES_LIST, fare);
+                Bundle bundle = new Bundle();
+                bundle.putString("key", ACTIVE_FARE_ID);
                 Intent intent = new Intent(activity, DetailsActivity.class);
+                intent.putExtra("bundle", bundle);
                 activity.startActivity(intent);
-
             }
         });
     }
@@ -67,8 +70,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
 
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView startPoint;
         private TextView destinationPoint;
@@ -79,9 +81,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             super(itemView);
             startPoint = (TextView) itemView.findViewById(R.id.start_point_name);
             destinationPoint = (TextView) itemView.findViewById(R.id.destination_point_name);
-            date = (TextView) itemView.findViewById(R.id.fare_date
-            );
+            date = (TextView) itemView.findViewById(R.id.fare_date);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
         }
+    }
+
+    public static String getKeyByValue(Map<String, Fare> map, Fare value) {
+        for (Map.Entry<String, Fare> entry : map.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 }

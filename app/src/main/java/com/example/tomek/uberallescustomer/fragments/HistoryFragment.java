@@ -3,8 +3,11 @@ package com.example.tomek.uberallescustomer.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,10 @@ import com.example.tomek.uberallescustomer.api.pojo.Point;
 import com.example.tomek.uberallescustomer.utils.RecyclerAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static com.example.tomek.uberallescustomer.LogedUserData.FARES_LIST;
 
 
 /**
@@ -24,6 +31,8 @@ public class HistoryFragment extends Fragment {
 
     RecyclerView recyclerView;
     ArrayList<Fare> fares;
+    RecyclerAdapter adapter;
+    public static boolean refershing = false;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -39,24 +48,47 @@ public class HistoryFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-        RecyclerAdapter adapter = new RecyclerAdapter(createExampleList(), getActivity());
+        adapter = new RecyclerAdapter(createExampleList(), getActivity());
         recyclerView.setAdapter(adapter);
 
         return rootView;
     }
 
-    private ArrayList<Fare> createExampleList(){
+    @Override
+    public void onResume() {
+        Log.e("DEBUG", "onResume of LoginFragment");
+        super.onResume();
+        if (refershing) {
+            HistoryFragment historyFragment = new HistoryFragment();
+            openFragment(historyFragment);
+            refershing = false;
+        }
+    }
+
+    @Override
+    public void onPause() {
+        Log.e("DEBUG", "OnPause of loginFragment");
+        super.onPause();
+    }
+
+    private ArrayList<Fare> createExampleList() {
         fares = new ArrayList<>();
 
-        Point first = new Point(17.1 ,20.2 );
-        Point second = new Point(27.1 ,10.2 );
+        if (FARES_LIST == null) {
+            Point first = new Point(17.1, 20.2);
+            Point second = new Point(27.1, 10.2);
+            FARES_LIST = new HashMap<>();
+            Fare fare = new Fare(first, second, "Szymon Zwoliński", 500700600, "12/03/1016");
+            FARES_LIST.put("-KiQxGUbh-TvcznBn6nX", fare);
+        }
+        return new ArrayList(FARES_LIST.values());
 
+    }
 
-        fares.add(new Fare(first,second,"Janusz Kowalski",700800300, "12.02.2017"));
-        fares.add(new Fare(second,first,"Andrzej Prawilny",77722200, "12.10.1997"));
-        fares.add(new Fare(second,first,"Andrzej Prawilny",77722200, "12.10.1997"));
-        fares.add(new Fare(second,first,"Andrzej Prawilny",77722200, "12.10.1997"));
-        fares.add(new Fare(second,first,"Andrzej Prawilny",77722200, "12.10.1997"));
-        return fares;
+    private void openFragment(final Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
 }

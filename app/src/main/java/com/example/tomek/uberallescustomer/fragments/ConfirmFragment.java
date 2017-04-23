@@ -28,6 +28,7 @@ import retrofit2.Response;
 import static com.example.tomek.uberallescustomer.LogedUserData.ACTIVE_FARE_ID;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
+import static com.example.tomek.uberallescustomer.LogedUserData.addFare;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +75,7 @@ public class ConfirmFragment extends Fragment {
         });
     }
 
-    public void createFare(Fare fare) {
+    public void createFare(final Fare fare) {
         final String phoneNumber = USER_PHONE.toString();
         final String password = USER_PASSWORD;
         UserService fareService = ApiClient.createService(UserService.class, phoneNumber, password);
@@ -85,6 +86,7 @@ public class ConfirmFragment extends Fragment {
             public void onResponse(Call<FareProof> call, Response<FareProof> response) {
                 if (response.isSuccessful()) {
                     ACTIVE_FARE_ID = response.body().getId();
+                    addFare(ACTIVE_FARE_ID, fare);
                     Log.d("OK", "Wszystko spoko - " + ACTIVE_FARE_ID);
                 } else {
                     Log.d("Error", "Coś poszło nie tak . . .");

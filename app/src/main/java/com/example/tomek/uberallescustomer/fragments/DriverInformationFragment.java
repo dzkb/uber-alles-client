@@ -23,6 +23,7 @@ import retrofit2.Response;
 import static com.example.tomek.uberallescustomer.LogedUserData.ACTIVE_FARE_ID;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
+import static com.example.tomek.uberallescustomer.LogedUserData.deleteFareByKey;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +52,6 @@ public class DriverInformationFragment extends Fragment {
                 deleteFare(ACTIVE_FARE_ID);
                 OrderFragment orderFragment = new OrderFragment();
                 openFragment(orderFragment);
-
             }
         });
 
@@ -63,10 +63,9 @@ public class DriverInformationFragment extends Fragment {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
-
     }
 
-    public void deleteFare(String fareId) {
+    public static void deleteFare(final String fareId) {
         final String phoneNumber = USER_PHONE.toString();
         final String password = USER_PASSWORD;
         UserService fareService = ApiClient.createService(UserService.class, phoneNumber, password);
@@ -77,6 +76,8 @@ public class DriverInformationFragment extends Fragment {
             public void onResponse(Call<Fare> call, Response<Fare> response) {
                 if (response.isSuccessful()) {
                     Log.d("OK", "Anulowano");
+                    deleteFareByKey(fareId);
+
                 } else {
                     Log.d("Error", response.message());
                 }
@@ -84,7 +85,6 @@ public class DriverInformationFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Fare> call, Throwable t) {
-                // something went completely south (like no internet connection)
                 Log.d("Error", t.getMessage());
             }
         });
