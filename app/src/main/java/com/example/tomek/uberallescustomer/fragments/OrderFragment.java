@@ -251,7 +251,7 @@ public class OrderFragment extends Fragment {
                 bundle.putDouble("EndLat", endAddress.getLatitude());
                 bundle.putDouble("EndLong", endAddress.getLongitude());
                 bundle.putString("name", USER_NAME + " " + USER_SURNAME);
-                bundle.putInt("phone", USER_PHONE);
+                bundle.putString("phone", USER_PHONE);
                 bundle.putString("time", getFareDateISO8601());
                 confirmFragment.setArguments(bundle);
                 openFragment(confirmFragment);

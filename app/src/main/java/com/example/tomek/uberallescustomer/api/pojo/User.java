@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class User {
 
     @SerializedName("phoneNumber")
-    public Integer phoneNumber;
+    public String phoneNumber;
     @SerializedName("firstName")
     public String firstName;
     @SerializedName("lastName")

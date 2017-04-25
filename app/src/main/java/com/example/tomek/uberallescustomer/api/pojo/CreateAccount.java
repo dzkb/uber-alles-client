@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class CreateAccount {
 
     @SerializedName("phoneNumber")
-    public Integer phoneNumber;
+    public String phoneNumber;
     @SerializedName("firstName")
     public String firstName;
     @SerializedName("lastName")
@@ -14,7 +14,7 @@ public class CreateAccount {
     @SerializedName("password")
     public String password;
 
-    public CreateAccount(int phoneNumber, String firstName, String lastName, String password) {
+    public CreateAccount(String phoneNumber, String firstName, String lastName, String password) {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;

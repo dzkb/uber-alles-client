@@ -45,7 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
                     firstName.length() > 0 &&
                     lastName.length() > 0 &&
                     password.length() > 0) {
-                CreateAccount account = new CreateAccount(Integer.parseInt(phoneNumber), firstName, lastName, password);
+                CreateAccount account = new CreateAccount(phoneNumber, firstName, lastName, password);
                 createAccount(account);
             } else {
                 Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show();
