@@ -1,5 +1,6 @@
 package com.example.tomek.uberallescustomer;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -92,6 +93,9 @@ public class LoginActivity extends AppCompatActivity {
         UserService userService =
                 ApiClient.createService(UserService.class, phoneNumber, password);
         Call<User> call = userService.basicLogin();
+        final ProgressDialog progress = new ProgressDialog(LoginActivity.this,R.style.SpinnerTheme);
+        progress.setProgressStyle(android.R.style.Widget_Material_ProgressBar_Large);
+        progress.show();
         call.enqueue(new Callback<User >() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -114,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                     response.errorBody();
                     makeToast();
                 }
+                progress.dismiss();
             }
 
             @Override
@@ -121,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (t.getMessage() != null) {
                     makeToast(t.getMessage());
                 }
+                progress.dismiss();
             }
         });
     }
