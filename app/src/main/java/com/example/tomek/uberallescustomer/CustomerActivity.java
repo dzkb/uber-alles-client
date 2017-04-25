@@ -37,7 +37,7 @@ public class CustomerActivity extends AppCompatActivity {
 
         orderFragment = new OrderFragment();
         openFragment(orderFragment);
-
+        bottomNavigationView.getMenu().getItem(1).setChecked(true);
     }
 
     public void initNavigationView() {
@@ -45,7 +45,6 @@ public class CustomerActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
                         switch (item.getItemId()) {
                             case R.id.action_history:
                                 HistoryFragment historyFragment = new HistoryFragment();
@@ -77,6 +76,7 @@ public class CustomerActivity extends AppCompatActivity {
         transaction.commit();
 
     }
+
 
     private void checkItem(MenuItem item) {
         item.setIcon(getResources().getDrawable(R.drawable.ic_local_taxi_yellow_24dp));
