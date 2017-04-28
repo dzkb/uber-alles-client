@@ -3,7 +3,7 @@ package com.example.tomek.uberallescustomer.utils;
 
 import java.util.Calendar;
 
-public class Helper {
+public class DateHelper {
 
     private static final int GRATER = 1;
     private static final int LOWER = -1;

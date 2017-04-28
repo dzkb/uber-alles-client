@@ -1,5 +1,6 @@
 package com.example.tomek.uberallescustomer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tomek.uberallescustomer.FirebaseCouldMessaging.InstanceIdService;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
 import com.example.tomek.uberallescustomer.api.pojo.CreateAccount;
@@ -20,7 +22,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.InstanceIdService.getRegistrationToken;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.saveCredentials;
+
 public class SignUpActivity extends AppCompatActivity {
+
+    private static Context context;
 
     @BindView(R.id.edit_text_create_first_name)
     EditText editTextCreateFirstName;
@@ -40,12 +51,13 @@ public class SignUpActivity extends AppCompatActivity {
         String phoneNumber = editTextCreatePhoneNumber.getText().toString();
         String firstName = editTextCreateFirstName.getText().toString();
         String lastName = editTextCreateLastName.getText().toString();
+        new InstanceIdService().onTokenRefresh();
         if (password.equals(editTextCreateConfirmPassword.getText().toString())) {
             if (phoneNumber.length() > 0 &&
                     firstName.length() > 0 &&
                     lastName.length() > 0 &&
                     password.length() > 0) {
-                CreateAccount account = new CreateAccount(phoneNumber, firstName, lastName, password);
+                CreateAccount account = new CreateAccount(phoneNumber, firstName, lastName, password, getRegistrationToken());
                 createAccount(account);
             } else {
                 Toast.makeText(this, "Wypełnij wszystkie pola", Toast.LENGTH_SHORT).show();
@@ -58,26 +70,27 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        SignUpActivity.context = getApplicationContext();
         ButterKnife.bind(this);
     }
 
-    public void createAccount(CreateAccount account) {
+    public void createAccount(final CreateAccount account) {
         UserService loginService = ApiClient.createService(UserService.class);
         Call<User> call = loginService.createAccount(account);
-        final String phoneNumber = account.phoneNumber.toString();
-        final String password = account.password;
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    // user object available
-                    Intent intent = new Intent(getBaseContext(), CustomerActivity.class);
-                    intent.putExtra("phone_number", phoneNumber);
-                    intent.putExtra("password", password);
-                    System.out.println("udalo sie " + phoneNumber + password);
+                    USER_NAME = response.body().firstName;
+                    USER_SURNAME = response.body().lastName;
+                    USER_PHONE = response.body().phoneNumber;
+                    USER_PASSWORD = account.password;
+                    Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                    Log.d("OK", "udalo sie " + USER_PHONE + USER_PASSWORD);
                     startActivity(intent);
+                    finish();
                 } else {
-                    // error response, no access to resource?
+                    Log.d("Error", "cos pposzlo nie tak");
                 }
             }
 

@@ -48,8 +48,8 @@ import java.util.TimeZone;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
-import static com.example.tomek.uberallescustomer.utils.Helper.compareDate;
-import static com.example.tomek.uberallescustomer.utils.Helper.compareTime;
+import static com.example.tomek.uberallescustomer.utils.DateHelper.compareDate;
+import static com.example.tomek.uberallescustomer.utils.DateHelper.compareTime;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;

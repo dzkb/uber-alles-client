@@ -13,11 +13,17 @@ public class CreateAccount {
     public String lastName;
     @SerializedName("password")
     public String password;
+    @SerializedName("registrationToken")
+    public String token;
+    @SerializedName("role")
+    public String role;
 
-    public CreateAccount(String phoneNumber, String firstName, String lastName, String password) {
+    public CreateAccount(String phoneNumber, String firstName, String lastName, String password, String token) {
         this.phoneNumber = phoneNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.token = token;
+        this.role = "customer";
     }
 }

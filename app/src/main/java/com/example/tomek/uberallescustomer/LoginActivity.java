@@ -28,6 +28,7 @@ import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.saveCredentials;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,16 +36,15 @@ public class LoginActivity extends AppCompatActivity {
     EditText phoneNumberEditText;
     @BindView(R.id.edit_text_password)
     EditText passwordEditText;
-
+    private static Context context;
 
     @OnClick(R.id.forgot_password_text)
     public void onForgotPasswordTextClick(View v) {
-        new InstanceIdService().onTokenRefresh();
         Toast.makeText(this, "Forgot password implementation", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.sing_up_text)
-    public void onSingupTextClick(View v){
+    public void onSingupTextClick(View v) {
         Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
         startActivity(intent);
     }
@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginButtonClick(View v) {
         String phoneNumber = phoneNumberEditText.getText().toString();
         String password = passwordEditText.getText().toString();
-        if(phoneNumber.length() > 0 && password.length() > 0 ) {
+        if (phoneNumber.length() > 0 && password.length() > 0) {
             checkCredentials(phoneNumber, password);
         } else {
             Toast.makeText(this, "Podaj dane logowania", Toast.LENGTH_SHORT).show();
@@ -71,32 +71,26 @@ public class LoginActivity extends AppCompatActivity {
         // create layout after checking credentials
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        context = getApplicationContext();
         ButterKnife.bind(this);
     }
+
     public void makeToast(String text) {
         Toast.makeText(this, R.string.wrong_password, Toast.LENGTH_SHORT).show();
     }
+
     public void makeToast() {
         Toast.makeText(this, R.string.wrong_password, Toast.LENGTH_SHORT).show();
     }
-    private void saveCredentials(String login, String password, String firstName, String lastName) {
-        SharedPreferences prefs = this.getSharedPreferences(
-                "com.uberalles", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("Authentication_Id",login);
-        editor.putString("Authentication_Password",password);
-        editor.putString("Authentication_Name",firstName);
-        editor.putString("Authentication_Surname",lastName);
-        editor.apply();
-    }
+
     public void checkCredentials(String phoneNumber, final String password) {
         UserService userService =
                 ApiClient.createService(UserService.class, phoneNumber, password);
         Call<User> call = userService.basicLogin();
-        final ProgressDialog progress = new ProgressDialog(LoginActivity.this,R.style.SpinnerTheme);
+        final ProgressDialog progress = new ProgressDialog(LoginActivity.this, R.style.SpinnerTheme);
         progress.setProgressStyle(android.R.style.Widget_Material_ProgressBar_Large);
         progress.show();
-        call.enqueue(new Callback<User >() {
+        call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
@@ -104,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     USER_SURNAME = response.body().lastName;
                     USER_PHONE = response.body().phoneNumber;
                     USER_PASSWORD = password;
-                    saveCredentials(USER_PHONE, USER_PASSWORD, USER_NAME, USER_SURNAME);
+                    saveCredentials(USER_PHONE, USER_PASSWORD, USER_NAME, USER_SURNAME, context);
                     Intent intent = new Intent(LoginActivity.this, CustomerActivity.class);
                     startActivity(intent);
                 } else {
