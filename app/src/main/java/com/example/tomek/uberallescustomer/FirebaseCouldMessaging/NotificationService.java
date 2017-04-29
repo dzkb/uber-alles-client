@@ -15,7 +15,12 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        showNotification(remoteMessage);
+        if (remoteMessage.getData() != null ) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.getData().toString());
+        }
+        if (remoteMessage.getNotification() != null ) {
+            showNotification(remoteMessage);
+        }
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         if (remoteMessage.getNotification() != null) {
