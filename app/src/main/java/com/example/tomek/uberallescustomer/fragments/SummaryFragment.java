@@ -1,16 +1,15 @@
 package com.example.tomek.uberallescustomer.fragments;
 
-
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.utils.CustomPagerAdapter;
@@ -25,14 +24,12 @@ public class SummaryFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         View rootView = inflater.inflate(R.layout.fragment_summary, container, false);
-
         TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Mapa"));
         tabLayout.addTab(tabLayout.newTab().setText("Podsumowanie"));
@@ -64,5 +61,4 @@ public class SummaryFragment extends Fragment {
 
         return rootView;
     }
-
 }

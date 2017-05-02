@@ -1,7 +1,5 @@
 package com.example.tomek.uberallescustomer.fragments;
 
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,15 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
-import com.example.tomek.uberallescustomer.CustomerActivity;
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.FareProof;
+import com.example.tomek.uberallescustomer.api.pojo.FareTimes;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
-import com.example.tomek.uberallescustomer.api.pojo.User;
+
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,12 +29,13 @@ import static com.example.tomek.uberallescustomer.LogedUserData.ACTIVE_FARE_ID;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.addFare;
+import static com.example.tomek.uberallescustomer.LogedUserData.times;
+import static com.example.tomek.uberallescustomer.fragments.OrderFragment.TimePickerFragment.setTextView;
+import static java.lang.String.format;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ConfirmFragment extends Fragment {
 
+    private TextView arriveTime;
 
     public ConfirmFragment() {
         // Required empty public constructor
@@ -46,16 +47,16 @@ public class ConfirmFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_confirm, container, false);
-
+        arriveTime = (TextView) view.findViewById(R.id.confirm_time);
         initOnClick(view);
 
         return view;
     }
 
-    private void initOnClick(View view){
+    private void initOnClick(View view) {
         Button confirmButton = (Button) view.findViewById(R.id.confirm_button);
         Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
-
+        setArriveTime();
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,5 +121,43 @@ public class ConfirmFragment extends Fragment {
         point = new Point(bundle.getDouble("EndLat"), bundle.getDouble("EndLong"));
         fare.setEndingPoint(point);
         return fare;
+    }
+
+    public static void getFareTime(final Point location) {
+        final String phoneNumber = USER_PHONE.toString();
+        final String password = USER_PASSWORD;
+        UserService fareService = ApiClient.createService(UserService.class, phoneNumber, password);
+        String [] loc = getLocationAsString(location);
+        Call<FareTimes> call = fareService.arrivalTime(loc[0], loc[1]);
+
+        call.enqueue(new Callback<FareTimes>() {
+            @Override
+            public void onResponse(Call<FareTimes> call, Response<FareTimes> response) {
+                if (response.isSuccessful()) {
+                    Log.d("OK", "Spoko spoko");
+                    times = response.body();
+                } else {
+                    Log.d("Error", response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FareTimes> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }
+
+    private static String [] getLocationAsString(Point point) {
+
+        String lat = format("%.2f", point.getLatitude());
+        String lon = format("%.2f", point.getLongitude());
+        return new String[]{lat.replace(',','.'), lon.replace(',','.')};
+    }
+
+    private void setArriveTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, times.getMin());
+        setTextView(arriveTime, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
     }
 }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
+import com.example.tomek.uberallescustomer.api.pojo.FareTimes;
 
 import java.util.HashMap;
 
@@ -17,6 +18,7 @@ public class LogedUserData {
     public static String USER_PASSWORD;
 
     public static String ACTIVE_FARE_ID;
+    public static FareTimes times;
 
     public static HashMap<String, Fare> FARES_LIST = null;
 

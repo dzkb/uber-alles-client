@@ -26,6 +26,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.tomek.uberallescustomer.R;
+import com.example.tomek.uberallescustomer.api.pojo.Point;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -48,16 +49,13 @@ import java.util.TimeZone;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
+import static com.example.tomek.uberallescustomer.fragments.ConfirmFragment.getFareTime;
 import static com.example.tomek.uberallescustomer.utils.DateHelper.compareDate;
 import static com.example.tomek.uberallescustomer.utils.DateHelper.compareTime;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class OrderFragment extends Fragment {
 
     MapView mapView;
@@ -254,6 +252,7 @@ public class OrderFragment extends Fragment {
                 bundle.putString("phone", USER_PHONE);
                 bundle.putString("time", getFareDateISO8601());
                 confirmFragment.setArguments(bundle);
+                getFareTime(new Point(startAddress.getLatitude(), startAddress.getLongitude()));
                 openFragment(confirmFragment);
             }
         });
@@ -296,6 +295,10 @@ public class OrderFragment extends Fragment {
             final StringBuilder sb = new StringBuilder(journeyTime.getText().length());
             sb.append(journeyTime.getText());
             journeyTime.setText(sb.toString() + StringUtils.leftPad(Integer.toString(hourOfDay), 2, '0') + ":" + StringUtils.leftPad(Integer.toString(minute), 2, '0'));
+        }
+
+        public static void setTextView(TextView journeyTime, int hourOfDay, int minute) {
+            journeyTime.setText(StringUtils.leftPad(Integer.toString(hourOfDay), 2, '0') + ":" + StringUtils.leftPad(Integer.toString(minute), 2, '0'));
         }
     }
 
