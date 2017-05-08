@@ -123,38 +123,6 @@ public class ConfirmFragment extends Fragment {
         return fare;
     }
 
-    public static void getFareTime(final Point location) {
-        final String phoneNumber = USER_PHONE.toString();
-        final String password = USER_PASSWORD;
-        UserService fareService = ApiClient.createService(UserService.class, phoneNumber, password);
-        String [] loc = getLocationAsString(location);
-        Call<FareTimes> call = fareService.arrivalTime(loc[0], loc[1]);
-
-        call.enqueue(new Callback<FareTimes>() {
-            @Override
-            public void onResponse(Call<FareTimes> call, Response<FareTimes> response) {
-                if (response.isSuccessful()) {
-                    Log.d("OK", "Spoko spoko");
-                    times = response.body();
-                } else {
-                    Log.d("Error", response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<FareTimes> call, Throwable t) {
-                Log.d("Error", t.getMessage());
-            }
-        });
-    }
-
-    private static String [] getLocationAsString(Point point) {
-
-        String lat = format("%.2f", point.getLatitude());
-        String lon = format("%.2f", point.getLongitude());
-        return new String[]{lat.replace(',','.'), lon.replace(',','.')};
-    }
-
     private void setArriveTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, times.getMin());

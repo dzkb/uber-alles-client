@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.tomek.uberallescustomer.R;
+import com.example.tomek.uberallescustomer.api.ApiClient;
+import com.example.tomek.uberallescustomer.api.UserService;
+import com.example.tomek.uberallescustomer.api.pojo.FareTimes;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -46,15 +50,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
-import static com.example.tomek.uberallescustomer.fragments.ConfirmFragment.getFareTime;
+import static com.example.tomek.uberallescustomer.LogedUserData.times;
 import static com.example.tomek.uberallescustomer.utils.DateHelper.compareDate;
 import static com.example.tomek.uberallescustomer.utils.DateHelper.compareTime;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+import static java.lang.String.format;
 
 public class OrderFragment extends Fragment {
 
@@ -252,13 +262,43 @@ public class OrderFragment extends Fragment {
                 bundle.putString("phone", USER_PHONE);
                 bundle.putString("time", getFareDateISO8601());
                 confirmFragment.setArguments(bundle);
-                getFareTime(new Point(startAddress.getLatitude(), startAddress.getLongitude()));
-                openFragment(confirmFragment);
+                getFareTime(new Point(startAddress.getLatitude(), startAddress.getLongitude()), confirmFragment);
             }
         });
 
-
     }
+    public void getFareTime(final Point location, final ConfirmFragment confirmFragment) {
+        final String phoneNumber = USER_PHONE.toString();
+        final String password = USER_PASSWORD;
+        UserService fareService = ApiClient.createService(UserService.class, phoneNumber, password);
+        String [] loc = getLocationAsString(location);
+        Call<FareTimes> call = fareService.arrivalTime(loc[0], loc[1]);
+
+        call.enqueue(new Callback<FareTimes>() {
+            @Override
+            public void onResponse(Call<FareTimes> call, Response<FareTimes> response) {
+                if (response.isSuccessful()) {
+                    Log.d("OK", "Spoko spoko");
+                    times = response.body();
+                    openFragment(confirmFragment);
+                } else {
+                    Log.d("Error", response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FareTimes> call, Throwable t) {
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }
+    private static String [] getLocationAsString(Point point) {
+
+        String lat = format("%.2f", point.getLatitude());
+        String lon = format("%.2f", point.getLongitude());
+        return new String[]{lat.replace(',','.'), lon.replace(',','.')};
+    }
+
 
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
