@@ -2,6 +2,9 @@ package com.example.tomek.uberallescustomer.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +17,12 @@ import com.example.tomek.uberallescustomer.DetailsActivity;
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,8 +55,30 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         final Fare fare = faresList.get(position);
         Point startPoint = fare.getStartingPoint();
         Point destinationPoint = fare.getEndingPoint();
-        holder.startPoint.setText(String.valueOf((startPoint.getLatitude() + ", " + startPoint.getLongitude())));
-        holder.destinationPoint.setText(String.valueOf((destinationPoint.getLatitude() + ", " + destinationPoint.getLongitude())));
+        Geocoder geocoder;
+        List<Address> addresses = null;
+        geocoder = new Geocoder(activity.getApplicationContext(), Locale.getDefault());
+        double startPointLatitude = startPoint.getLatitude();
+        double startPointLongitude = startPoint.getLongitude();
+        try {
+            addresses = geocoder.getFromLocation(startPointLatitude, startPointLongitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+        holder.startPoint.setText(address);
+        List<Address> addressesDestination = null;
+        double destinationPointLatitude = destinationPoint.getLatitude();
+        double destinationPointLongitude = destinationPoint.getLongitude();
+        try {
+            addressesDestination = geocoder.getFromLocation(destinationPointLatitude, destinationPointLongitude, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String addressDestination = addressesDestination.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+        holder.destinationPoint.setText(addressDestination);
         holder.date.setText(fare.getStartingDate());
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
