@@ -51,8 +51,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/googleMapsApiKey" />
 
-        <activity android:name=".DetailsActivity"
-            android:theme="@style/AppThemeNoBar"></activity>
+        <activity
+            android:name=".DetailsActivity"
+            android:theme="@style/AppThemeNoBar" />
+        <activity android:name=".PopUp"></activity>
     </application>
 
 </manifest>

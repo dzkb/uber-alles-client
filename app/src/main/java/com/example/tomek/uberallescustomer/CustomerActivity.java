@@ -1,6 +1,7 @@
 package com.example.tomek.uberallescustomer;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -22,7 +23,7 @@ public class CustomerActivity extends AppCompatActivity {
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
-
+    private static Context context;
     OrderFragment orderFragment;
 
     @Override
@@ -33,7 +34,7 @@ public class CustomerActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initNavigationView();
-
+        context = getApplicationContext();
         orderFragment = new OrderFragment();
         openFragment(orderFragment);
         bottomNavigationView.getMenu().getItem(1).setChecked(true);
@@ -74,5 +75,9 @@ public class CustomerActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
 
+    }
+
+    public static Context giveMeContext() {
+        return context;
     }
 }
