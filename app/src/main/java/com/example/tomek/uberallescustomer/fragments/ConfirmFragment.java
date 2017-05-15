@@ -41,15 +41,12 @@ public class ConfirmFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_confirm, container, false);
         arriveTime = (TextView) view.findViewById(R.id.confirm_time);
         initOnClick(view);
-
         return view;
     }
 
@@ -66,7 +63,6 @@ public class ConfirmFragment extends Fragment {
                 openFragment(summaryFragment);
             }
         });
-
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,11 +89,10 @@ public class ConfirmFragment extends Fragment {
                     Log.d("Error", "Coś poszło nie tak . . .");
                 }
             }
-
             @Override
             public void onFailure(Call<FareProof> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.d("Error", t.getMessage());
+                Log.d("Error create fare", t.getMessage());
             }
         });
     }
@@ -107,14 +102,13 @@ public class ConfirmFragment extends Fragment {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
-
     }
 
     private static Fare getFareDetails(Bundle bundle) {
         Point point = null;
         Fare fare = new Fare();
         fare.setClientName(bundle.getString("name"));
-        fare.setClientPhone(bundle.getInt("phone"));
+        fare.setClientPhone(bundle.getString("phone"));
         fare.setStartingDate(bundle.getString("time"));
         point = new Point(bundle.getDouble("StartLat"), bundle.getDouble("StartLong"));
         fare.setStartingPoint(point);

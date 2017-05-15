@@ -22,4 +22,10 @@ public class FareTimes {
     public Double getAvg() {
         return avg;
     }
+
+    public FareTimes(int min, int max, double avg) {
+        this.min = min;
+        this.max = max;
+        this.avg = avg;
+    }
 }

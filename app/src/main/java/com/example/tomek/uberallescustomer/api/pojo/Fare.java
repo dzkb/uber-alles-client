@@ -43,6 +43,10 @@ public class Fare {
         this.clientPhone = clientPhone;
     }
 
+    public void setClientPhone(String clientPhone) {
+        this.clientPhone = Integer.parseInt(clientPhone);
+    }
+
     public void setStartingDate(String startingDate) {
         this.startingDate = startingDate;
     }
