@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.example.tomek.uberallescustomer.PopUp;
@@ -46,6 +47,10 @@ public class NotificationService extends FirebaseMessagingService {
             switch (type) {
                 case CMLocalisationUpdate:
                     upadateLocation(data.get("driverPhone"), data.get("latitude"), data.get("longitude"));
+                    Intent intent = new Intent("CMLocalisationUpdate");
+                    intent.putExtra("latitude", Double.parseDouble(data.get("latitude")));
+                    intent.putExtra("longitude", Double.parseDouble(data.get("longitude")));
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                     break;
                 case CMFareConfirmation:
                     /*uruchomienie popup'a który wyświetli numer telefonu kierowcy który akceptował
