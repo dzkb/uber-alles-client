@@ -20,7 +20,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +34,7 @@ public class SummaryMapFragment extends Fragment {
     MapView mapView;
     private View rootView;
     private GoogleMap googleMap;
+    private Marker driverMarker;
     public static final double WROCLAW_LAT = 51.1078852;
     public static final double WROCLAW_LNG = 17.0385376;
 
@@ -56,9 +61,17 @@ public class SummaryMapFragment extends Fragment {
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            // Get extra data included in the Intent
             double latitude = intent.getDoubleExtra("latitude", WROCLAW_LAT);
-            double longitude = intent.getDoubleExtra("latitude", WROCLAW_LNG);
+            double longitude = intent.getDoubleExtra("longitude", WROCLAW_LNG);
+            LatLng position = new LatLng(latitude, longitude);
+            Log.d("MAP", Double.toString(latitude) + ", " + Double.toString(longitude));
+            if (driverMarker != null) {
+                driverMarker.setPosition(position);
+            }else{
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(position);
+                driverMarker = googleMap.addMarker(markerOptions);
+            }
         }
     };
 
