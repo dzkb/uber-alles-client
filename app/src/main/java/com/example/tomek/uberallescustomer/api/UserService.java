@@ -4,6 +4,7 @@ import com.example.tomek.uberallescustomer.api.pojo.CreateAccount;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.FareProof;
 import com.example.tomek.uberallescustomer.api.pojo.FareTimes;
+import com.example.tomek.uberallescustomer.api.pojo.RegistrationToken;
 import com.example.tomek.uberallescustomer.api.pojo.User;
 
 import retrofit2.Call;
@@ -11,6 +12,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -27,4 +29,6 @@ public interface UserService {
     Call<Fare> deleteFare(@Path("fareId") String fareId);
     @GET("/arrivalTimes?")
     Call<FareTimes> arrivalTime(@Query("lat") String lat, @Query("lon") String lon);
+    @PUT("/registrationTokens")
+    Call<String> putRegistrationToken(@Body RegistrationToken registrationToken);
 }

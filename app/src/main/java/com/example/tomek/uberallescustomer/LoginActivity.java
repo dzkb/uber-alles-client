@@ -13,7 +13,9 @@ import android.widget.Toast;
 import com.example.tomek.uberallescustomer.FirebaseCouldMessaging.InstanceIdService;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
+import com.example.tomek.uberallescustomer.api.pojo.RegistrationToken;
 import com.example.tomek.uberallescustomer.api.pojo.User;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
 
@@ -99,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
                     USER_PHONE = response.body().phoneNumber;
                     USER_PASSWORD = password;
                     saveCredentials(USER_PHONE, USER_PASSWORD, USER_NAME, USER_SURNAME, context);
+                    TokenUpdater.updateRegistrationToken(
+                            new RegistrationToken(FirebaseInstanceId.getInstance().getToken()));
                     Intent intent = new Intent(LoginActivity.this, CustomerActivity.class);
                     startActivity(intent);
                 } else {
