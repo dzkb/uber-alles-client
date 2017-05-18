@@ -58,6 +58,8 @@ import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.newFareEndingPoint;
+import static com.example.tomek.uberallescustomer.LogedUserData.newFareStartingPoint;
 import static com.example.tomek.uberallescustomer.LogedUserData.times;
 import static com.example.tomek.uberallescustomer.utils.DateHelper.compareDate;
 import static com.example.tomek.uberallescustomer.utils.DateHelper.compareTime;
@@ -80,32 +82,22 @@ public class OrderFragment extends Fragment {
     public static final double WROCLAW_LAT = 51.1078852;
     public static final double WROCLAW_LNG = 17.0385376;
 
-
     public OrderFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_order, container, false);
-
         initOnClick();
-
         openNextFragment.setVisibility(View.INVISIBLE);
-
         mapView = initMap();
-
-
         mapView.onCreate(savedInstanceState);
         mapView.onResume(); // needed to get the map to display immediately
-
-
         return rootView;
     }
-
 
     @Override
     public void onResume() {
@@ -144,7 +136,6 @@ public class OrderFragment extends Fragment {
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-
                 LatLng wroclaw = new LatLng(WROCLAW_LAT, WROCLAW_LNG);
                 // googleMap.animateCamera(CameraUpdateFactory.newLatLng(wroclaw));
                 CameraUpdate location = CameraUpdateFactory.newLatLngZoom(
@@ -153,14 +144,10 @@ public class OrderFragment extends Fragment {
 
             }
         });
-
-
         return mapView;
-
     }
 
     private void initOnClick() {
-
 
         ImageView myLocation = (ImageView) rootView.findViewById(R.id.location_image);
         final FloatingActionButton fabAddLocation = (FloatingActionButton) rootView.findViewById(R.id.fab_add_location);
@@ -173,7 +160,6 @@ public class OrderFragment extends Fragment {
         myLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (ActivityCompat.checkSelfPermission(rootView.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(rootView.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
@@ -189,6 +175,8 @@ public class OrderFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
+                newFareStartingPoint = startPosition.getText().toString();
+                newFareEndingPoint = destinantionPosition.getText().toString();
                 String startLocation = getLocation(startPosition);
                 String destinationLocation = getLocation(destinantionPosition);
                 List<Address> addressList = null;
@@ -285,15 +273,14 @@ public class OrderFragment extends Fragment {
                     Log.d("Error", response.message());
                 }
             }
-
             @Override
             public void onFailure(Call<FareTimes> call, Throwable t) {
                 Log.d("Error", t.getMessage());
             }
         });
+        times = new FareTimes(new Integer(12), new Integer(16), new Double(14));
     }
     private static String [] getLocationAsString(Point point) {
-
         String lat = format("%.2f", point.getLatitude());
         String lon = format("%.2f", point.getLongitude());
         return new String[]{lat.replace(',','.'), lon.replace(',','.')};
@@ -320,7 +307,6 @@ public class OrderFragment extends Fragment {
 
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
             givenCalendar.set(Calendar.MINUTE, minute);
             givenCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             Calendar c = Calendar.getInstance();
@@ -353,7 +339,6 @@ public class OrderFragment extends Fragment {
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
-
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 

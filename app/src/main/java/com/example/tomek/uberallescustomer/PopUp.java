@@ -3,20 +3,23 @@ package com.example.tomek.uberallescustomer;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class PopUp extends AppCompatActivity {
 
-    @BindView(R.id.popUpType)
-    TextView type;
-    @BindView(R.id.numberOfReporter)
-    TextView numberOfReporter;
-    @BindView(R.id.otherInfo)
-    TextView otherInfo;
+    @BindView(R.id.info_cancel_confirm)
+    TextView info_cancel_confirm;
+    @BindView(R.id.ok_btn)
+    Button btn_ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +28,13 @@ public class PopUp extends AppCompatActivity {
         ButterKnife.bind(this);
         Intent intent = getIntent();
         String typ = intent.getStringExtra("typ");
-        String [] parameters = intent.getStringArrayExtra("parameters");
-        numberOfReporter.setText(parameters[0]);
-        otherInfo.setText(parameters[1]);
-        type.setText(typ);
-
+        String[] parameters = intent.getStringArrayExtra("parameters");
+        //if (typeOfNotification == CMFareConfirmation)
+            info_cancel_confirm.setText("dupa");
     }
 
-
+    @OnClick(R.id.ok_btn)
+    public void onLoginButtonClick(View v) {
+        finish();
+    }
 }

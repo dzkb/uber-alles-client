@@ -30,6 +30,7 @@ import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
+import static com.example.tomek.uberallescustomer.LogedUserData.addFare;
 import static com.example.tomek.uberallescustomer.LogedUserData.saveCredentials;
 
 public class LoginActivity extends AppCompatActivity {
@@ -42,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.forgot_password_text)
     public void onForgotPasswordTextClick(View v) {
+        //addFare(null, null);
         Toast.makeText(this, "Forgot password implementation", Toast.LENGTH_SHORT).show();
     }
 
@@ -127,5 +129,8 @@ public class LoginActivity extends AppCompatActivity {
                 progress.dismiss();
             }
         });
+    }
+    public static Context giveMeLoginContext() {
+        return context;
     }
 }
