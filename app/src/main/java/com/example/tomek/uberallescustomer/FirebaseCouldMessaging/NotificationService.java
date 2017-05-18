@@ -7,12 +7,17 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.tomek.uberallescustomer.CustomerActivity;
 import com.example.tomek.uberallescustomer.PopUp;
 import com.example.tomek.uberallescustomer.R;
+import com.example.tomek.uberallescustomer.fragments.SummaryFragment;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -98,6 +103,8 @@ public class NotificationService extends FirebaseMessagingService {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
         Log.d(TAG, "From: " + remoteMessage.getFrom());
+
+
     }
 
     public void showNotification(RemoteMessage remoteMessage) {
@@ -146,5 +153,6 @@ public class NotificationService extends FirebaseMessagingService {
         else if (type.equals(CMFareConfirmation.name())) return CMFareConfirmation;
         else return CMFareCancellation;
     }
+
 
 }

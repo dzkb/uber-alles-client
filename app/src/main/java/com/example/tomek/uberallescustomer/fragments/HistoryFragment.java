@@ -54,7 +54,7 @@ public class HistoryFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-        adapter = new RecyclerAdapter(createList(), getActivity());
+        adapter = new RecyclerAdapter(createList(), getActivity(), getContext());
         recyclerView.setAdapter(adapter);
 
         return rootView;
