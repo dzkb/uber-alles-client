@@ -18,6 +18,7 @@ import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.FareProof;
 import com.example.tomek.uberallescustomer.api.pojo.FareTimes;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
+import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 
 import java.util.Calendar;
 
@@ -36,6 +37,7 @@ import static java.lang.String.format;
 public class ConfirmFragment extends Fragment {
 
     private TextView arriveTime;
+    private FeedReaderDbHelper helper;
 
     public ConfirmFragment() {
         // Required empty public constructor
@@ -46,6 +48,7 @@ public class ConfirmFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_confirm, container, false);
         arriveTime = (TextView) view.findViewById(R.id.confirm_time);
+        helper = new FeedReaderDbHelper(getContext());
         initOnClick(view);
         return view;
     }
@@ -60,6 +63,9 @@ public class ConfirmFragment extends Fragment {
                 SummaryFragment summaryFragment = new SummaryFragment();
                 Fare fare = getFareDetails(getArguments());
                 createFare(fare);
+
+
+
                 openFragment(summaryFragment);
             }
         });
@@ -84,6 +90,7 @@ public class ConfirmFragment extends Fragment {
                 if (response.isSuccessful()) {
                     ACTIVE_FARE_ID = response.body().getId();
                     addFare(ACTIVE_FARE_ID, fare);
+                    helper.insert(helper.getWritableDatabase(), fare, "new", ACTIVE_FARE_ID);
                     Log.d("OK", "Wszystko spoko - " + ACTIVE_FARE_ID);
                 } else {
                     Log.d("Error", "Coś poszło nie tak . . .");
