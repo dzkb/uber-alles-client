@@ -1,27 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:weightSum="1">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tomek.uberallescustomer.fragments.ConfirmFragment"
+    style="@style/Theme.Design.NoActionBar">
 
-    <TextView
-        android:id="@+id/popUpType"
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Popup"
-        android:textSize="30sp" />
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/numberOfReporter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="24sp" />
+        <TextView
+            android:id="@+id/info_cancel_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/cancelation_info"
+            android:textColor="@android:color/white"
+            android:layout_margin="40dp"
+            android:textSize="20sp"
+            android:textAlignment="center"/>
 
-    <TextView
-        android:id="@+id/otherInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="24sp" />
-</LinearLayout>
+        <Button
+            android:id="@+id/ok_btn"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:background="@color/colorAccent"
+            android:elevation="15dp"
+            android:text="@string/ok_btn"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -45,7 +45,7 @@ public class LogedUserData {
     public static String newFareStartingPoint;
     public static String newFareEndingPoint;
 
-    public static HashMap<String, Point> currentDriverLocation = null; //key -> driver Phone Number, value -> current loc
+    public static HashMap<String, Point> currentDriverLocation = null; // key -> driver Phone Number, value -> current loc
 
     public static void upadateLocation(String key, String lat, String lon) {
         Point newDriverPoint = new Point(lat, lon);
