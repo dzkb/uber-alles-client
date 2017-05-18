@@ -44,10 +44,11 @@ public class NotificationService extends FirebaseMessagingService {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData().toString());
             Type type = getTypeFromMessage(remoteMessage.getData());
             Map<String, String> data = remoteMessage.getData();
+            Intent intent;
             switch (type) {
                 case CMLocalisationUpdate:
                     upadateLocation(data.get("driverPhone"), data.get("latitude"), data.get("longitude"));
-                    Intent intent = new Intent("CMLocalisationUpdate");
+                    intent = new Intent(CMLocalisationUpdate.name());
                     intent.putExtra("latitude", Double.parseDouble(data.get("latitude")));
                     intent.putExtra("longitude", Double.parseDouble(data.get("longitude")));
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
@@ -65,6 +66,13 @@ public class NotificationService extends FirebaseMessagingService {
                     String driverName = data.get("driverName");
                     String carName = data.get("carName");
                     String carPlateNumber = data.get("carPlateNumber");
+                    intent = new Intent(CMFareConfirmation.name())
+                            .putExtra("driverPhone", driverPhone)
+                            .putExtra("id", fareId)
+                            .putExtra("driverName", driverName)
+                            .putExtra("carName", carName)
+                            .putExtra("carPlateNumber", carPlateNumber);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                     createNotification(CMFareConfirmation.toString(), CONFIRM_MESSAGE, MESSAGE_TITLE, PopUp.class, CONFIRM_SUBMESSAGE,
                             driverPhone, fareId, driverName, carName, carPlateNumber);
                     break;
@@ -75,6 +83,11 @@ public class NotificationService extends FirebaseMessagingService {
                     String phoneNumber = data.get("phoneNumber");
                     String id = data.get("id");
                     String which = data.get("origin");
+                    intent = new Intent(CMFareCancellation.name())
+                            .putExtra("phoneNumber", phoneNumber)
+                            .putExtra("id", id)
+                            .putExtra("origin", which);
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                     createNotification(CMFareCancellation.toString(), CANCEL_MESSAGE, MESSAGE_TITLE, PopUp.class, "Szukaj nowego kierowcy",
                             phoneNumber, id, which);
                     break;
