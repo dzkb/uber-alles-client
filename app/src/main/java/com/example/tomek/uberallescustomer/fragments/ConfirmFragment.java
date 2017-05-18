@@ -66,7 +66,7 @@ public class ConfirmFragment extends Fragment {
 
 
 
-                openFragment(summaryFragment);
+                //openFragment(summaryFragment);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {

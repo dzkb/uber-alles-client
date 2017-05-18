@@ -3,6 +3,7 @@ package com.example.tomek.uberallescustomer;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.tomek.uberallescustomer.fragments.HistoryFragment;
 import com.example.tomek.uberallescustomer.fragments.OrderFragment;
@@ -25,6 +27,7 @@ public class CustomerActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     private static Context context;
     OrderFragment orderFragment;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class CustomerActivity extends AppCompatActivity {
         );
     }
 
-    private void openFragment(final Fragment fragment) {
+    public void openFragment(final Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
@@ -80,4 +83,26 @@ public class CustomerActivity extends AppCompatActivity {
     public static Context giveMeContext() {
         return context;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
+
+
 }
