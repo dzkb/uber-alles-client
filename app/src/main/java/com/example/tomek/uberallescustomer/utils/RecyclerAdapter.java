@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.tomek.uberallescustomer.DetailsActivity;
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
+import com.example.tomek.uberallescustomer.api.pojo.HistorialFare;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -31,11 +32,12 @@ import static com.example.tomek.uberallescustomer.LogedUserData.FARES_LIST;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    ArrayList<Fare> faresList;
+//    ArrayList<Fare> faresList;
+    ArrayList<HistorialFare> historialFares;
     Activity activity;
 
-    public RecyclerAdapter(ArrayList<Fare> faresList, Activity activity) {
-        this.faresList = faresList;
+    public RecyclerAdapter(ArrayList<HistorialFare> historialFares, Activity activity) {
+        this.historialFares = historialFares;
         this.activity = activity;
     }
 
@@ -52,50 +54,53 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, int position) {
 
-        final Fare fare = faresList.get(position);
-        Point startPoint = fare.getStartingPoint();
-        Point destinationPoint = fare.getEndingPoint();
-        Geocoder geocoder;
-        List<Address> addresses = null;
-        geocoder = new Geocoder(activity.getApplicationContext(), Locale.getDefault());
-        double startPointLatitude = startPoint.getLatitude();
-        double startPointLongitude = startPoint.getLongitude();
-        try {
-            addresses = geocoder.getFromLocation(startPointLatitude, startPointLongitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-
-        holder.startPoint.setText(address);
-        List<Address> addressesDestination = null;
-        double destinationPointLatitude = destinationPoint.getLatitude();
-        double destinationPointLongitude = destinationPoint.getLongitude();
-        try {
-            addressesDestination = geocoder.getFromLocation(destinationPointLatitude, destinationPointLongitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String addressDestination = addressesDestination.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-
-        holder.destinationPoint.setText(addressDestination);
-        holder.date.setText(fare.getStartingDate());
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ACTIVE_FARE_ID = getKeyByValue(FARES_LIST, fare);
-                Bundle bundle = new Bundle();
-                bundle.putString("key", ACTIVE_FARE_ID);
-                Intent intent = new Intent(activity, DetailsActivity.class);
-                intent.putExtra("bundle", bundle);
-                activity.startActivity(intent);
-            }
-        });
+        final HistorialFare historialFare = historialFares.get(position);
+        String startPointFromList = historialFare.getStartingPoint();
+        String destinationPointFromList = historialFare.getEndingPoint();
+        holder.startPoint.setText(startPointFromList);
+        holder.destinationPoint.setText(destinationPointFromList);
+        holder.date.setText(historialFare.getStartingDate());
+//        Geocoder geocoder;
+//        List<Address> addresses = null;
+//        geocoder = new Geocoder(activity.getApplicationContext(), Locale.getDefault());
+//        double startPointLatitude = startPoint.getLatitude();
+//        double startPointLongitude = startPoint.getLongitude();
+//        try {
+//            addresses = geocoder.getFromLocation(startPointLatitude, startPointLongitude, 1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//
+//        holder.startPoint.setText(address);
+//        List<Address> addressesDestination = null;
+//        double destinationPointLatitude = destinationPoint.getLatitude();
+//        double destinationPointLongitude = destinationPoint.getLongitude();
+//        try {
+//            addressesDestination = geocoder.getFromLocation(destinationPointLatitude, destinationPointLongitude, 1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        String addressDestination = addressesDestination.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+//
+//        holder.destinationPoint.setText(addressDestination);
+//        holder.date.setText(historialFare.getStartingDate());
+//        holder.cardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ACTIVE_FARE_ID = getKeyByValue(FARES_LIST, his);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("key", ACTIVE_FARE_ID);
+//                Intent intent = new Intent(activity, DetailsActivity.class);
+//                intent.putExtra("bundle", bundle);
+//                activity.startActivity(intent);
+//            }
+//        });
     }
 
     @Override
     public int getItemCount() {
-        return faresList.size();
+        return historialFares.size();
     }
 
 

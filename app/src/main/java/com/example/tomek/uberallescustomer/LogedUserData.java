@@ -37,7 +37,7 @@ public class LogedUserData {
             //oncreate nalezy wykonać przy instalacji - tylko nie wiem jak
             //helper.onCreate(helper.getWritableDatabase());
         }
-        helper.insert(helper.getWritableDatabase(), fare, "new", key);
+       // helper.insert(helper.getWritableDatabase(), fare, "new", key);
         HashMap<String, HistorialFare> fares = helper.selectById("500");
         int e = 0;        //FARES_LIST.put(key, fare);
     }

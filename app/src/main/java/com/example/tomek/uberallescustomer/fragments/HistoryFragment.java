@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
+import com.example.tomek.uberallescustomer.api.pojo.HistorialFare;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
 import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 import com.example.tomek.uberallescustomer.utils.RecyclerAdapter;
@@ -53,7 +54,7 @@ public class HistoryFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-        adapter = new RecyclerAdapter(createExampleList(), getActivity());
+        adapter = new RecyclerAdapter(createList(), getActivity());
         recyclerView.setAdapter(adapter);
 
         return rootView;
@@ -97,12 +98,14 @@ public class HistoryFragment extends Fragment {
         transaction.commit();
     }
 
-    private void createList(){
+    private ArrayList<HistorialFare> createList(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = prefs.edit();
         String login = prefs.getString("Authentication_Id", " ");
         Log.d("Login", login);
         FeedReaderDbHelper helper = new FeedReaderDbHelper(getContext());
-        
+        HashMap<String, HistorialFare> historyMap = helper.selectById(login);
+        ArrayList<HistorialFare> historyList = new ArrayList<HistorialFare>(historyMap.values());
+        return historyList;
+
     }
 }
