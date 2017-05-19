@@ -73,6 +73,7 @@
                         android:textSize="25sp" />
 
                     <TextView
+                        android:id="@+id/driver_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/name_surname"
@@ -122,6 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/car"
+                        android:id="@+id/car_model"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@+id/ic_car"
@@ -170,6 +172,7 @@
                         android:layout_below="@+id/plates"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
+                        android:id="@+id/plates_number"
                         android:layout_toRightOf="@+id/ic_plates"
                         android:text="@string/example_plates_number"
                         android:textColor="@android:color/darker_gray"
@@ -217,6 +220,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="5dp"
                         android:layout_toRightOf="@+id/ic_phone"
+                        android:id="@+id/driver_phone_number"
                         android:text="@string/example_phone_number"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="18sp" />
