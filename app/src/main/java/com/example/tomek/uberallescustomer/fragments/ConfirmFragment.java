@@ -1,5 +1,6 @@
 package com.example.tomek.uberallescustomer.fragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.tomek.uberallescustomer.LoginActivity;
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
@@ -64,7 +66,9 @@ public class ConfirmFragment extends Fragment {
                 Fare fare = getFareDetails(getArguments());
                 createFare(fare);
 
-
+                final ProgressDialog progress = new ProgressDialog(getActivity(), R.style.SpinnerTheme);
+                progress.setProgressStyle(android.R.style.Widget_Material_ProgressBar_Large);
+                progress.show();
 
                 //openFragment(summaryFragment);
             }

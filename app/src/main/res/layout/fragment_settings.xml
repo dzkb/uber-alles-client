@@ -5,9 +5,22 @@
     tools:context="com.example.tomek.uberallescustomer.fragments.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="3" />
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/sing_out_button"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:background="@color/colorAccent"
+            android:elevation="15dp"
+            android:text="@string/sing_out"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+    </LinearLayout>
 
 </FrameLayout>
