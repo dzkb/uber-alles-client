@@ -1,14 +1,18 @@
 package com.example.tomek.uberallescustomer.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +29,7 @@ import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.HistorialFare;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
+import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 import com.example.tomek.uberallescustomer.fragments.SummaryFragment;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -52,6 +57,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     ArrayList<HistorialFare> historialFares;
     Activity activity;
     Context context;
+    private FeedReaderDbHelper helper;
 
     public RecyclerAdapter(ArrayList<HistorialFare> historialFares, Activity activity, Context context) {
         this.historialFares = historialFares;
@@ -70,7 +76,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, final int position) {
 
         final HistorialFare historialFare = historialFares.get(position);
         String startPointFromList = historialFare.getStartingPoint();
@@ -94,6 +100,40 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         } else {
             holder.cardView.setBackgroundColor(Color.LTGRAY);
         }
+
+        holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                AlertDialog alertDialog = new AlertDialog.Builder(activity)
+                        .setTitle("Usun przejazd")
+                        .setMessage("Czy napewno chcesz usunąć przejazd z histori?")
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing (will close dialog)
+
+                            }
+                        })
+                        .setPositiveButton(android.R.string.yes,  new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do something
+                                helper = new FeedReaderDbHelper(context);
+                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                                String login = prefs.getString("Authentication_Id", " ");
+                                helper.deleteById(login,historialFare.getFareId());
+                                historialFares.remove(position);
+                                notifyDataSetChanged();
+
+                            }
+                        })
+                        .create();
+                alertDialog.show();
+
+                return true;
+            }
+        });
 
     }
 
