@@ -1,23 +1,16 @@
 package com.example.tomek.uberallescustomer.FirebaseCouldMessaging;
 
-import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.example.tomek.uberallescustomer.CustomerActivity;
 import com.example.tomek.uberallescustomer.PopUp;
 import com.example.tomek.uberallescustomer.R;
-import com.example.tomek.uberallescustomer.fragments.SummaryFragment;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -80,6 +73,9 @@ public class NotificationService extends FirebaseMessagingService {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                     createNotification(CMFareConfirmation.toString(), CONFIRM_MESSAGE, MESSAGE_TITLE, PopUp.class, CONFIRM_SUBMESSAGE,
                             driverPhone, fareId, driverName, carName, carPlateNumber);
+
+
+
                     break;
                 case CMFareCancellation:
                     /* Notification + uruchomienie popup'a wyświetlającego informacje o anulowaniu

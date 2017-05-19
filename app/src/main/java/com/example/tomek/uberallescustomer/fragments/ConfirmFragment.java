@@ -12,13 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.tomek.uberallescustomer.LoginActivity;
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.FareProof;
-import com.example.tomek.uberallescustomer.api.pojo.FareTimes;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
 import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 
@@ -40,6 +38,7 @@ public class ConfirmFragment extends Fragment {
 
     private TextView arriveTime;
     private FeedReaderDbHelper helper;
+    ProgressDialog progress;
 
     public ConfirmFragment() {
         // Required empty public constructor
@@ -52,8 +51,12 @@ public class ConfirmFragment extends Fragment {
         arriveTime = (TextView) view.findViewById(R.id.confirm_time);
         helper = new FeedReaderDbHelper(getContext());
         initOnClick(view);
+        progress = new ProgressDialog(getActivity(), R.style.SpinnerTheme);
+        progress.setProgressStyle(android.R.style.Widget_Material_ProgressBar_Large);
         return view;
     }
+
+
 
     private void initOnClick(View view) {
         Button confirmButton = (Button) view.findViewById(R.id.confirm_button);
@@ -66,8 +69,7 @@ public class ConfirmFragment extends Fragment {
                 Fare fare = getFareDetails(getArguments());
                 createFare(fare);
 
-                final ProgressDialog progress = new ProgressDialog(getActivity(), R.style.SpinnerTheme);
-                progress.setProgressStyle(android.R.style.Widget_Material_ProgressBar_Large);
+
                 progress.show();
 
                 //openFragment(summaryFragment);
@@ -132,5 +134,25 @@ public class ConfirmFragment extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, times.getMin());
         setTextView(arriveTime, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+    }
+
+    public void onFareRequest(){
+        //progress.dismiss();
+
+        SummaryFragment summaryFaragment = new SummaryFragment();
+        openFragment(summaryFaragment);
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        progress.dismiss();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        progress.dismiss();
     }
 }

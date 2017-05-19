@@ -1,7 +1,10 @@
 package com.example.tomek.uberallescustomer;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -9,13 +12,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.tomek.uberallescustomer.fragments.HistoryFragment;
 import com.example.tomek.uberallescustomer.fragments.OrderFragment;
 import com.example.tomek.uberallescustomer.fragments.SettingsFragment;
+import com.example.tomek.uberallescustomer.fragments.SummaryFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +47,8 @@ public class CustomerActivity extends AppCompatActivity {
         orderFragment = new OrderFragment();
         openFragment(orderFragment);
         bottomNavigationView.getMenu().getItem(1).setChecked(true);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+                new IntentFilter("CMFareConfirmation"));
     }
 
     public void initNavigationView() {
@@ -76,7 +84,7 @@ public class CustomerActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
 
     }
 
@@ -102,6 +110,30 @@ public class CustomerActivity extends AppCompatActivity {
             }
         }, 2000);
     }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //No call for super(). Bug on API Level > 11.
+    }
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("message");
+            Log.d("receiver", "Got message: " + message);
+            Bundle bundle = intent.getExtras();
+            SummaryFragment summaryFragment = new SummaryFragment();
+            summaryFragment.setArguments(bundle);
+            openFragment(summaryFragment);
+        }
+    };
+
+//
+//    @Override
+//    protected void onDestroy() {
+//        // Unregister since the activity is about to be closed.
+//        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+//        super.onDestroy();
+//    }
 
 
 
