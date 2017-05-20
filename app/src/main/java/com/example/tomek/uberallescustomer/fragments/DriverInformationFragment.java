@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.ApiClient;
@@ -32,7 +33,7 @@ public class DriverInformationFragment extends Fragment {
 
     private View rootView;
     Button cancelRide;
-
+    TextView driverNameTextView,driverCarTextView, carPlateTextView, driverPhoneTextView;
 
     public DriverInformationFragment() {
         // Required empty public constructor
@@ -54,6 +55,39 @@ public class DriverInformationFragment extends Fragment {
                 openFragment(orderFragment);
             }
         });
+
+        bindViews();
+
+        Bundle bundle = this.getArguments();
+
+        String driverPhone = (String) bundle.get("driverPhone");
+        String driverName = (String) bundle.get("driverName");
+        String carModel = (String) bundle.get("carName");
+        String carPlatesNumber = (String) bundle.get("carPlateNumber");
+
+        if(driverName == null){
+            driverNameTextView.setText("Brak imienia kierowcy");
+        } else {
+            driverNameTextView.setText(driverName);
+        }
+
+        if(driverPhone == null){
+            driverNameTextView.setText("Brak telefonu kierowcy");
+        } else {
+            driverPhoneTextView.setText(driverPhone);
+        }
+
+        if(carModel == null){
+            driverNameTextView.setText("Brak modelu samochodu kierowcy");
+        } else {
+            driverCarTextView.setText(carModel);
+        }
+
+        if(carPlatesNumber == null){
+            driverNameTextView.setText("Brak rejestracji samochodu kierowcy");
+        } else {
+            carPlateTextView.setText(carPlatesNumber);
+        }
 
         return rootView;
     }
@@ -88,5 +122,14 @@ public class DriverInformationFragment extends Fragment {
                 Log.d("Error", t.getMessage());
             }
         });
+    }
+
+    private void bindViews(){
+
+        driverNameTextView = (TextView) rootView.findViewById(R.id.driver_name);
+        driverCarTextView = (TextView) rootView.findViewById(R.id.car_model);
+        carPlateTextView = (TextView) rootView.findViewById(R.id.plates_number);
+        driverPhoneTextView = (TextView) rootView.findViewById(R.id.driver_phone_number);
+
     }
 }

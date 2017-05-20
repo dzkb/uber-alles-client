@@ -1,6 +1,7 @@
 package com.example.tomek.uberallescustomer.utils;
 
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,10 +12,12 @@ import com.example.tomek.uberallescustomer.fragments.SummaryMapFragment;
 public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     int tabCount;
+    Bundle extras;
 
-    public CustomPagerAdapter(FragmentManager fm, int tabCount) {
+    public CustomPagerAdapter(FragmentManager fm, int tabCount, Bundle extras) {
         super(fm);
         this.tabCount = tabCount;
+        this.extras = extras;
     }
 
     @Override
@@ -25,6 +28,9 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
                 return summaryMapFragment;
             case 1:
                 DriverInformationFragment driverInformationFragment = new DriverInformationFragment();
+                if(extras != null){
+                    driverInformationFragment.setArguments(extras);
+                }
                 return driverInformationFragment;
             default:
                 return null;
@@ -35,4 +41,6 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return tabCount;
     }
+
+
 }
