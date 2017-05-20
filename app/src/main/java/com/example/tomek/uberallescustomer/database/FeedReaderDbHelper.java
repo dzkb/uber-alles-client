@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.HistorialFare;
@@ -51,8 +52,9 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                 status + "')");
     }
 
-    public void insertExample(SQLiteDatabase db) {
-        db.execSQL("insert into fares values(500, 'rwgv3465773tf', 'Szymon', '2047.51.18', 'Wro', 'Waw', 'new')");
+    public static void insertExample(SQLiteDatabase db) {
+        db.execSQL("insert into fares values(500, '-KdsgGDSGdgdfdert4g34vRE3Ghadfh', 'Szymon', '2047.51.18', 'Wro', 'Waw', 'new')");
+        Log.i("Insert INFO", "Dodano przykałdowy rekord do tabeli");
     }
 
     public HashMap<String, HistorialFare> selectById(String user) {
@@ -123,7 +125,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
     public void updateById(String user, String id, String newStatus) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor c = db.rawQuery("UPDATE fares SET status = " + newStatus + " WHERE fareId = '" + id + "' and userPhone = " + user + ";", null);
+        Cursor c = db.rawQuery("UPDATE fares SET status = '" + newStatus + "' WHERE fareId = '" + id + "' and userPhone = " + user + ";", null);
         c.moveToFirst();
         c.close();
     }

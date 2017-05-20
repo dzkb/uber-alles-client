@@ -24,6 +24,7 @@
     <string name="confirm_info">Najbliższa taksówka znajdzie się we wskazanej lokalizacji o godzinie: </string>
     <string name="cancelation_info">Wybrany kierowca anulował zlecenie wykonania Twojego przejazdu</string>
     <string name="confirmation_info">Wybrany kierowca zaakceptował zlecenie wykonania Twojego przejazdu</string>
+    <string name="completion_info">Twój przejazd został zakończony. Zapraszamy do skorzystania z naszych usług w przyszłości</string>
     <string name="time_example">12:56</string>
     <string name="cancel">Anuluj</string>
     <string name="confirm">Potwierdz</string>
