@@ -15,6 +15,7 @@ import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
 import com.example.tomek.uberallescustomer.api.pojo.RegistrationToken;
 import com.example.tomek.uberallescustomer.api.pojo.User;
+import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
@@ -30,8 +31,8 @@ import static com.example.tomek.uberallescustomer.LogedUserData.USER_NAME;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_SURNAME;
-import static com.example.tomek.uberallescustomer.LogedUserData.addFare;
 import static com.example.tomek.uberallescustomer.LogedUserData.saveCredentials;
+import static com.example.tomek.uberallescustomer.database.FeedReaderDbHelper.insertExample;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -43,7 +44,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.forgot_password_text)
     public void onForgotPasswordTextClick(View v) {
-        //addFare(null, null);
+        FeedReaderDbHelper helper = new FeedReaderDbHelper(getApplicationContext());
+        //helper.onCreate(helper.getWritableDatabase());
+        insertExample(helper.getWritableDatabase());
         Toast.makeText(this, "Forgot password implementation", Toast.LENGTH_SHORT).show();
     }
 

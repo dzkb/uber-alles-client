@@ -9,9 +9,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.NotificationService.Type.CMFareCancellation;
+import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.NotificationService.Type.CMFareCompletion;
+import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.NotificationService.Type.CMFareConfirmation;
+import static com.example.tomek.uberallescustomer.LogedUserData.driverPhone;
+import static com.example.tomek.uberallescustomer.LogedUserData.typeOfNotification;
 
 
 public class PopUp extends AppCompatActivity {
@@ -28,9 +36,11 @@ public class PopUp extends AppCompatActivity {
         ButterKnife.bind(this);
         Intent intent = getIntent();
         String typ = intent.getStringExtra("typ");
-        String[] parameters = intent.getStringArrayExtra("parameters");
-        //if (typeOfNotification == CMFareConfirmation)
-            info_cancel_confirm.setText("dupa");
+        if (typeOfNotification == CMFareCompletion)
+            info_cancel_confirm.setText(R.string.completion_info);
+        else {
+            info_cancel_confirm.setText("Wybrany kierowca o numerze " + driverPhone + " anulował zlecenie wykonania Twojego przejazdu");
+        }
     }
 
     @OnClick(R.id.ok_btn)

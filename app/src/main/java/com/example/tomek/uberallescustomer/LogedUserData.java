@@ -12,9 +12,10 @@ import com.example.tomek.uberallescustomer.api.pojo.HistorialFare;
 import com.example.tomek.uberallescustomer.api.pojo.Point;
 import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 
+
 import java.util.HashMap;
 
-import static com.example.tomek.uberallescustomer.CustomerActivity.giveMeContext;
+import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.NotificationService.Type;
 import static com.example.tomek.uberallescustomer.LoginActivity.giveMeLoginContext;
 
 public class LogedUserData {
@@ -26,6 +27,8 @@ public class LogedUserData {
 
     public static String ACTIVE_FARE_ID;
     public static FareTimes times;
+    public static Type typeOfNotification;
+    public static String driverPhone;
 
     public static HashMap<String, Fare> FARES_LIST = null;
 

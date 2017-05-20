@@ -53,7 +53,7 @@ import static com.example.tomek.uberallescustomer.LogedUserData.FARES_LIST;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-//    ArrayList<Fare> faresList;
+    //    ArrayList<Fare> faresList;
     ArrayList<HistorialFare> historialFares;
     Activity activity;
     Context context;
@@ -85,7 +85,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.destinationPoint.setText(destinationPointFromList);
         holder.date.setText(CommonDate.getFormattedTime(historialFare.getStartingDate()));
 
-        if (historialFare.getStatus().equals("new")){
+        if (historialFare.getStatus().equals("new")) {
             holder.cardView.setCardBackgroundColor(Color.RED);
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -115,14 +115,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
                             }
                         })
-                        .setPositiveButton(android.R.string.yes,  new DialogInterface.OnClickListener() {
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // do something
                                 helper = new FeedReaderDbHelper(context);
                                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                                 String login = prefs.getString("Authentication_Id", " ");
-                                helper.deleteById(login,historialFare.getFareId());
+                                helper.deleteById(login, historialFare.getFareId());
                                 historialFares.remove(position);
                                 notifyDataSetChanged();
 
@@ -138,7 +138,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     private void openFragment(final Fragment fragment) {
-        FragmentManager fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
+        FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
@@ -148,7 +148,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public int getItemCount() {
         return historialFares.size();
     }
-
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

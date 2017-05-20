@@ -9,18 +9,28 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import static android.R.attr.phoneNumber;
+import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.NotificationService.Type.CMFareCompletion;
+import static com.example.tomek.uberallescustomer.LogedUserData.typeOfNotification;
+import static com.example.tomek.uberallescustomer.LogedUserData.driverPhone;
+
 import com.example.tomek.uberallescustomer.PopUp;
 import com.example.tomek.uberallescustomer.R;
+import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
+import static android.R.attr.type;
 import static android.content.ContentValues.TAG;
 import static com.example.tomek.uberallescustomer.CustomerActivity.giveMeContext;
 import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.NotificationService.Type.CMFareCancellation;
 import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.NotificationService.Type.CMFareConfirmation;
 import static com.example.tomek.uberallescustomer.FirebaseCouldMessaging.NotificationService.Type.CMLocalisationUpdate;
+import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
 import static com.example.tomek.uberallescustomer.LogedUserData.upadateLocation;
 
 public class NotificationService extends FirebaseMessagingService {
@@ -29,21 +39,27 @@ public class NotificationService extends FirebaseMessagingService {
     private static final String MESSAGE_TITLE = "UWAGA!";
     private static final String CONFIRM_MESSAGE = "Jeden z kierowców podjął Twój przejazd. ";
     private static final String CONFIRM_SUBMESSAGE = "Kliknij, aby wyświetlić dodatkowe informacje";
+    private static final String COMPLETE_MSG = "Twój przejazd zakończył się";
     private static final String TOP_BAR_TITLE = "Aktualizacja statusu Twojego przejazdu";
-    enum Type {
+
+    private FeedReaderDbHelper helper;
+
+    public enum Type {
         CMLocalisationUpdate,
         CMFareConfirmation,
-        CMFareCancellation
+        CMFareCancellation,
+        CMFareCompletion
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        if (remoteMessage.getData() != null ) {
+        if (remoteMessage.getData() != null) {
+            helper = new FeedReaderDbHelper(giveMeContext());
             Log.d(TAG, "Message data payload: " + remoteMessage.getData().toString());
-            Type type = getTypeFromMessage(remoteMessage.getData());
+            typeOfNotification = getTypeFromMessage(remoteMessage.getData());
             Map<String, String> data = remoteMessage.getData();
             Intent intent;
-            switch (type) {
+            switch (typeOfNotification) {
                 case CMLocalisationUpdate:
                     upadateLocation(data.get("driverPhone"), data.get("latitude"), data.get("longitude"));
                     intent = new Intent(CMLocalisationUpdate.name());
@@ -59,29 +75,27 @@ public class NotificationService extends FirebaseMessagingService {
                       * przez kierowce (przechowujemy je w shared lub w operacyjnej, zeby je móc potem odczytac) nie bedzie tez
                       * ono widoczne w historii. dopiero po potwierdzeniu przez kierowce znajdzie sie
                       * ono w historii gdzie bedzie mozna podejrzec dane kierowcy i miejsce na mapie gdzie sie znajduje aktualne*/
-                    String driverPhone = data.get("driverPhone");
+                    String driverPhoneNumber = data.get("driverPhone");
                     String fareId = data.get("id");
                     String driverName = data.get("driverName");
                     String carName = data.get("carName");
                     String carPlateNumber = data.get("carPlateNumber");
                     intent = new Intent(CMFareConfirmation.name())
-                            .putExtra("driverPhone", driverPhone)
+                            .putExtra("driverPhone", driverPhoneNumber)
                             .putExtra("id", fareId)
                             .putExtra("driverName", driverName)
                             .putExtra("carName", carName)
                             .putExtra("carPlateNumber", carPlateNumber);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                     createNotification(CMFareConfirmation.toString(), CONFIRM_MESSAGE, MESSAGE_TITLE, PopUp.class, CONFIRM_SUBMESSAGE,
-                            driverPhone, fareId, driverName, carName, carPlateNumber);
-
-
-
+                            driverPhoneNumber, fareId, driverName, carName, carPlateNumber);
+                    helper.updateById(USER_PHONE, fareId, "confirmed");
                     break;
                 case CMFareCancellation:
                     /* Notification + uruchomienie popup'a wyświetlającego informacje o anulowaniu
                     - po obydwu stronach takie samo działanie
                     */
-                    String phoneNumber = data.get("phoneNumber");
+                    driverPhone = data.get("phoneNumber");
                     String id = data.get("id");
                     String which = data.get("origin");
                     intent = new Intent(CMFareCancellation.name())
@@ -90,11 +104,19 @@ public class NotificationService extends FirebaseMessagingService {
                             .putExtra("origin", which);
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                     createNotification(CMFareCancellation.toString(), CANCEL_MESSAGE, MESSAGE_TITLE, PopUp.class, "Szukaj nowego kierowcy",
-                            phoneNumber, id, which);
+                            driverPhone, id, which);
+                    helper.deleteById(USER_PHONE, id);
                     break;
+                case CMFareCompletion:
+                    String completedFareId = data.get("id");
+                    createNotification(CMFareCancellation.toString(), COMPLETE_MSG, MESSAGE_TITLE, PopUp.class, "Dziękujemy");
+                    helper.updateById(USER_PHONE, completedFareId, "completed");
+                    break;
+                default:
+                    Log.i("INFO" + getClass().getName(), "Sekcja Default");
             }
         }
-        if (remoteMessage.getNotification() != null ) {
+        if (remoteMessage.getNotification() != null) {
             showNotification(remoteMessage);
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
@@ -123,7 +145,7 @@ public class NotificationService extends FirebaseMessagingService {
         Notification myNotication;
         Intent intent = new Intent(giveMeContext(), cls);
         intent.putExtra("typ", type);
-        intent.putExtra("parameters", params);
+        intent.putStringArrayListExtra("parameters", new ArrayList<String>(Arrays.asList(params)));
         PendingIntent pendingIntent = PendingIntent.getActivity(giveMeContext(), 1, intent, 0);
 
         Notification.Builder builder = new Notification.Builder(giveMeContext());
@@ -133,7 +155,9 @@ public class NotificationService extends FirebaseMessagingService {
         builder.setContentTitle(title);
         builder.setContentText(message);
         builder.setSmallIcon(R.drawable.ic_local_taxi_yellow_24dp);
-        builder.setContentIntent(pendingIntent);
+        if (typeOfNotification != CMFareConfirmation)
+            builder.setContentIntent(pendingIntent);
+        builder.setAutoCancel(true);
         builder.setOngoing(true);
         builder.setSubText(subText);   //API level 16
         builder.setNumber(100);
@@ -147,7 +171,8 @@ public class NotificationService extends FirebaseMessagingService {
         String type = data.get("type");
         if (type.equals(CMLocalisationUpdate.name())) return CMLocalisationUpdate;
         else if (type.equals(CMFareConfirmation.name())) return CMFareConfirmation;
-        else return CMFareCancellation;
+        else if (type.equals(CMFareCancellation.name())) return CMFareCancellation;
+        else return CMFareCompletion;
     }
 
 
