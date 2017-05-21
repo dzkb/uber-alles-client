@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.tomek.uberallescustomer.api.pojo.Driver;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.api.pojo.HistorialFare;
 
@@ -52,10 +53,41 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                 status + "')");
     }
 
+
     public static void insertExample(SQLiteDatabase db) {
         db.execSQL("insert into fares values(500, '-KdsgGDSGdgdfdert4g34vRE3Ghadfh', 'Szymon', '2047.51.18', 'Wro', 'Waw', 'new')");
         Log.i("Insert INFO", "Dodano przykałdowy rekord do tabeli");
     }
+
+    public void insertToHistory(SQLiteDatabase db, String id, Driver driver){
+        db.execSQL("insert into historyClient values(" +
+                id + ", '"+
+                driver.getDriverName() + "', '" +
+                driver.getDriverPhone() + "', '" +
+                driver.getCarName() + "', '" +
+                driver.getCarPlateNumber() + "')");
+    }
+
+    public HashMap<String, Driver> selectDriversByFareId(String fareId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("Select * from historyClient where fareId = " + fareId + ";", null);
+        HashMap<String, Driver> map = new HashMap<>();
+        if(c.moveToFirst()){
+            do{
+                String driverName = c.getString(1);
+                int driverPhone = c.getInt(2);
+                String carModel = c.getString(3);
+                String platesNumber = c.getString(4);
+                Driver driver = new Driver(driverName, driverPhone, carModel, platesNumber);
+                map.put(fareId, driver);
+            }while (c.moveToNext());
+            c.close();
+        }
+        return map;
+
+    }
+
+
 
     public HashMap<String, HistorialFare> selectById(String user) {
         SQLiteDatabase db = this.getReadableDatabase();

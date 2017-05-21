@@ -12,8 +12,17 @@ public class FeedReaderContract {
                     "startingDate TEXT, " +
                     "startingPoint TEXT, " +
                     "endingPoint TEXT," +
-                    "status TEXT)";
+                    "status TEXT);"
+            +"Create Table historyClient(" +
+                    "fareId TEXT Primary Key, "+
+                    "driverName TEXT, " +
+                    "driverPhone integer, " +
+                    "carModel TEXT, " +
+                    "carPlates TEXT)";
+
+
 
     public static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS  fares";
+            "DROP TABLE IF EXISTS  fares;"+
+            "DROP TABLE IF EXISTS historyClient";
 }
