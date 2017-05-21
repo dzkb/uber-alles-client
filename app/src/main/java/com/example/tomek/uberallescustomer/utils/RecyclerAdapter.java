@@ -78,6 +78,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, final int position) {
 
+        getDataFromDatabase();
         final HistorialFare historialFare = historialFares.get(position);
         String startPointFromList = historialFare.getStartingPoint();
         String destinationPointFromList = historialFare.getEndingPoint();
@@ -91,7 +92,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    Boolean isFromHisoty = true;
+                    bundle.putBoolean("isFromHistory", isFromHisoty);
                     SummaryFragment summaryFragment = new SummaryFragment();
+                    summaryFragment.setArguments(bundle);
                     openFragment(summaryFragment);
 
 
@@ -100,6 +105,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         } else {
             holder.cardView.setBackgroundColor(Color.LTGRAY);
         }
+
+
 
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -142,6 +149,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
+    }
+
+    private void getDataFromDatabase (){
+
     }
 
     @Override

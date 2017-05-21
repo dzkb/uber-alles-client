@@ -25,6 +25,9 @@ public class SummaryFragment extends Fragment {
 
     View rootView;
 
+    Bundle bundleFromHistorial;
+    Boolean isFromHistory = false;
+
     public SummaryFragment() {
         // Required empty public constructor
     }
@@ -41,7 +44,7 @@ public class SummaryFragment extends Fragment {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
 
-        Bundle bundle =this.getArguments();
+        Bundle bundle = this.getArguments();
 
 
 
