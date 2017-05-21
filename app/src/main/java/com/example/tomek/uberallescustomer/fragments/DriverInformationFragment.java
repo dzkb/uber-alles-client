@@ -1,10 +1,13 @@
 package com.example.tomek.uberallescustomer.fragments;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,8 @@ import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
+import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
+import com.example.tomek.uberallescustomer.utils.RecyclerAdapter;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,18 +52,29 @@ public class DriverInformationFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_driver_information, container, false);
 
         cancelRide = (Button) rootView.findViewById(R.id.cancel_ride);
-        cancelRide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteFare(ACTIVE_FARE_ID);
-                OrderFragment orderFragment = new OrderFragment();
-                openFragment(orderFragment);
-            }
-        });
+
 
         bindViews();
 
         Bundle bundle = this.getArguments();
+
+        final String id = (String) bundle.getString("id", null);
+
+        cancelRide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(id !=null) {
+                    FeedReaderDbHelper helper = new FeedReaderDbHelper(getContext());
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    String login = prefs.getString("Authentication_Id", " ");
+                    helper.deleteById(login, id);
+
+
+                }
+                OrderFragment orderFragment = new OrderFragment();
+                openFragment(orderFragment);
+            }
+        });
 
         String driverPhone = (String) bundle.get("driverPhone");
         String driverName = (String) bundle.get("driverName");

@@ -18,10 +18,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.tomek.uberallescustomer.api.pojo.Driver;
+import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 import com.example.tomek.uberallescustomer.fragments.HistoryFragment;
 import com.example.tomek.uberallescustomer.fragments.OrderFragment;
 import com.example.tomek.uberallescustomer.fragments.SettingsFragment;
 import com.example.tomek.uberallescustomer.fragments.SummaryFragment;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +45,8 @@ public class CustomerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer);
 
         ButterKnife.bind(this);
+
+        databaseExample();
 
         initNavigationView();
         context = getApplicationContext();
@@ -120,12 +126,23 @@ public class CustomerActivity extends AppCompatActivity {
             // Get extra data included in the Intent
             String message = intent.getStringExtra("message");
             Log.d("receiver", "Got message: " + message);
+
             Bundle bundle = intent.getExtras();
+            //FeedReaderDbHelper helper = new FeedReaderDbHelper();
             SummaryFragment summaryFragment = new SummaryFragment();
             summaryFragment.setArguments(bundle);
             openFragment(summaryFragment);
         }
     };
+
+    private void databaseExample () {
+        FeedReaderDbHelper helper = new FeedReaderDbHelper(getApplicationContext());
+        Driver driver = new Driver("Janusz", 605631019, "Fiat 125p", "ODF 8000");
+        helper.insertToHistory(helper.getWritableDatabase(),"id123",driver);
+
+        HashMap<String,Driver> map = new HashMap<>();
+        map=helper.selectDriversByFareId("id123");
+    }
 
 //
 //    @Override

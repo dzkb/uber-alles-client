@@ -63,6 +63,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         this.historialFares = historialFares;
         this.activity = activity;
         this.context = context;
+        notifyDataSetChanged();
     }
 
 
@@ -85,6 +86,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.startPoint.setText(startPointFromList);
         holder.destinationPoint.setText(destinationPointFromList);
         holder.date.setText(CommonDate.getFormattedTime(historialFare.getStartingDate()));
+
+
 
         if (historialFare.getStatus().equals("new")) {
             holder.cardView.setCardBackgroundColor(Color.RED);
@@ -159,6 +162,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public int getItemCount() {
         return historialFares.size();
     }
+
+
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
