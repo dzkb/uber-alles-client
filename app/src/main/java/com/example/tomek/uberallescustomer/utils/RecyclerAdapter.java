@@ -63,6 +63,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         this.historialFares = historialFares;
         this.activity = activity;
         this.context = context;
+        notifyDataSetChanged();
     }
 
 
@@ -86,17 +87,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.destinationPoint.setText(destinationPointFromList);
         holder.date.setText(CommonDate.getFormattedTime(historialFare.getStartingDate()));
 
-        if (historialFare.getStatus().equals("new")) {
+
+
+        if (historialFare.getStatus().equals("confirmed")) {
             holder.cardView.setCardBackgroundColor(Color.RED);
 
             holder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bundle bundle = new Bundle();
+                    Bundle bundle1 = new Bundle();
                     Boolean isFromHisoty = true;
-                    bundle.putBoolean("isFromHistory", isFromHisoty);
+                    bundle1.putString("id",historialFare.getFareId());
+
                     SummaryFragment summaryFragment = new SummaryFragment();
-                    summaryFragment.setArguments(bundle);
+                    summaryFragment.setArguments(bundle1);
                     openFragment(summaryFragment);
 
 
@@ -159,6 +163,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public int getItemCount() {
         return historialFares.size();
     }
+
+
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

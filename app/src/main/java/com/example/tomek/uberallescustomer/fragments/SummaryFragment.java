@@ -3,6 +3,8 @@ package com.example.tomek.uberallescustomer.fragments;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tomek.uberallescustomer.R;
+import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 import com.example.tomek.uberallescustomer.utils.CustomPagerAdapter;
 
 /**
@@ -24,7 +27,9 @@ public class SummaryFragment extends Fragment {
 
 
     View rootView;
-
+    CustomPagerAdapter adapter;
+    ViewPager viewPager;
+    FragmentManager fragmentManager;
     Bundle bundleFromHistorial;
     Boolean isFromHistory = false;
 
@@ -43,13 +48,19 @@ public class SummaryFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("Podsumowanie"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
+        FeedReaderDbHelper helper = new FeedReaderDbHelper(getContext());
+
+        fragmentManager = getActivity().getSupportFragmentManager();
+
 
         Bundle bundle = this.getArguments();
+        String id = (String) bundle.get("id");
 
 
 
-        final ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.pager);
-        PagerAdapter adapter = new CustomPagerAdapter(getActivity().getSupportFragmentManager(), tabLayout.getTabCount(), bundle);
+        viewPager = (ViewPager) rootView.findViewById(R.id.pager);
+        adapter = new CustomPagerAdapter(fragmentManager, tabLayout.getTabCount(), bundle);
+        adapter.notifyDataSetChanged();
 
         viewPager.setAdapter(adapter);
 
@@ -76,4 +87,17 @@ public class SummaryFragment extends Fragment {
     }
 
 
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        viewPager = null;
+        fragmentManager = null;
+
+        //viewPager.setAdapter(null);
+
+
+    }
 }

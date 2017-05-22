@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import com.example.tomek.uberallescustomer.fragments.DriverInformationFragment;
 import com.example.tomek.uberallescustomer.fragments.SummaryMapFragment;
@@ -13,6 +14,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
     int tabCount;
     Bundle extras;
+    String id;
 
     public CustomPagerAdapter(FragmentManager fm, int tabCount, Bundle extras) {
         super(fm);
@@ -27,10 +29,10 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
                 SummaryMapFragment summaryMapFragment = new SummaryMapFragment();
                 return summaryMapFragment;
             case 1:
+
                 DriverInformationFragment driverInformationFragment = new DriverInformationFragment();
-                if(extras != null){
-                    driverInformationFragment.setArguments(extras);
-                }
+                driverInformationFragment.setArguments(extras);
+
                 return driverInformationFragment;
             default:
                 return null;
@@ -42,5 +44,9 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
         return tabCount;
     }
 
-
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
+        int position1 = position;
+    }
 }
