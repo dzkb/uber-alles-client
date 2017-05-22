@@ -58,11 +58,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     Activity activity;
     Context context;
     private FeedReaderDbHelper helper;
+    SummaryFragment summaryFragment;
 
     public RecyclerAdapter(ArrayList<HistorialFare> historialFares, Activity activity, Context context) {
         this.historialFares = historialFares;
         this.activity = activity;
         this.context = context;
+        summaryFragment = new SummaryFragment();
         notifyDataSetChanged();
     }
 
@@ -99,7 +101,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     Boolean isFromHisoty = true;
                     bundle1.putString("id",historialFare.getFareId());
 
-                    SummaryFragment summaryFragment = new SummaryFragment();
+                    summaryFragment = new SummaryFragment();
                     summaryFragment.setArguments(bundle1);
                     openFragment(summaryFragment);
 

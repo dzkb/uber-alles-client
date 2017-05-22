@@ -60,7 +60,7 @@ public class SummaryFragment extends Fragment {
 
         viewPager = (ViewPager) rootView.findViewById(R.id.pager);
         adapter = new CustomPagerAdapter(fragmentManager, tabLayout.getTabCount(), bundle);
-        adapter.notifyDataSetChanged();
+
 
         viewPager.setAdapter(adapter);
 
