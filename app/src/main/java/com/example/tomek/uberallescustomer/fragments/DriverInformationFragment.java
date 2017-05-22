@@ -1,6 +1,7 @@
 package com.example.tomek.uberallescustomer.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.example.tomek.uberallescustomer.R;
 import com.example.tomek.uberallescustomer.api.ApiClient;
 import com.example.tomek.uberallescustomer.api.UserService;
+import com.example.tomek.uberallescustomer.api.pojo.Driver;
 import com.example.tomek.uberallescustomer.api.pojo.Fare;
 import com.example.tomek.uberallescustomer.database.FeedReaderDbHelper;
 import com.example.tomek.uberallescustomer.utils.RecyclerAdapter;
@@ -34,13 +36,16 @@ import static com.example.tomek.uberallescustomer.LogedUserData.deleteFareByKey;
 /**
  * A simple {@link Fragment} subclass.
  */
+
 public class DriverInformationFragment extends Fragment {
 
     private View rootView;
     Button cancelRide;
-    TextView driverNameTextView,driverCarTextView, carPlateTextView, driverPhoneTextView;
+    TextView driverNameTextView, driverCarTextView, carPlateTextView, driverPhoneTextView;
+
 
     public DriverInformationFragment() {
+
         // Required empty public constructor
     }
 
@@ -57,17 +62,26 @@ public class DriverInformationFragment extends Fragment {
         bindViews();
 
         Bundle bundle = this.getArguments();
+//
+        String id = (String) bundle.getString("id", null);
 
-        final String id = (String) bundle.getString("id", null);
+        if (id == null) {
+            id = (String) bundle.get("id");
+        }
+
+        final String id1 = id;
+
+        FeedReaderDbHelper helper = new FeedReaderDbHelper(getContext());
+        Driver driver = helper.selectDriversByFareId(id);
 
         cancelRide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(id !=null) {
+                if (id1 != null) {
                     FeedReaderDbHelper helper = new FeedReaderDbHelper(getContext());
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
                     String login = prefs.getString("Authentication_Id", " ");
-                    helper.deleteById(login, id);
+                    helper.deleteById(login, id1);
 
 
                 }
@@ -76,30 +90,30 @@ public class DriverInformationFragment extends Fragment {
             }
         });
 
-        String driverPhone = (String) bundle.get("driverPhone");
-        String driverName = (String) bundle.get("driverName");
-        String carModel = (String) bundle.get("carName");
-        String carPlatesNumber = (String) bundle.get("carPlateNumber");
+        int driverPhone = driver.getDriverPhone();
+        String driverName = driver.getDriverName();
+        String carModel = driver.getCarName();
+        String carPlatesNumber = driver.getCarPlateNumber();
 
-        if(driverName == null){
+        if (driverName == null) {
             driverNameTextView.setText("Brak imienia kierowcy");
         } else {
             driverNameTextView.setText(driverName);
         }
 
-        if(driverPhone == null){
+        if (driverPhone == 0) {
             driverNameTextView.setText("Brak telefonu kierowcy");
         } else {
-            driverPhoneTextView.setText(driverPhone);
+            driverPhoneTextView.setText(String.valueOf(driverPhone));
         }
 
-        if(carModel == null){
+        if (carModel == null) {
             driverNameTextView.setText("Brak modelu samochodu kierowcy");
         } else {
             driverCarTextView.setText(carModel);
         }
 
-        if(carPlatesNumber == null){
+        if (carPlatesNumber == null) {
             driverNameTextView.setText("Brak rejestracji samochodu kierowcy");
         } else {
             carPlateTextView.setText(carPlatesNumber);
@@ -140,7 +154,7 @@ public class DriverInformationFragment extends Fragment {
         });
     }
 
-    private void bindViews(){
+    private void bindViews() {
 
         driverNameTextView = (TextView) rootView.findViewById(R.id.driver_name);
         driverCarTextView = (TextView) rootView.findViewById(R.id.car_model);

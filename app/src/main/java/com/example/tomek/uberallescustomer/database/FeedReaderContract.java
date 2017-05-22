@@ -4,7 +4,7 @@ public class FeedReaderContract {
 
     private FeedReaderContract() {}
 
-    public static final String SQL_CREATE_ENTRIES =
+    public static final String SQL_CREATE_ENTRIES1 =
             "CREATE TABLE fares(" +
                     "userPhone integer, " +
                     "fareId TEXT Primary Key, " +
@@ -12,8 +12,10 @@ public class FeedReaderContract {
                     "startingDate TEXT, " +
                     "startingPoint TEXT, " +
                     "endingPoint TEXT," +
-                    "status TEXT);"
-            +"Create Table historyClient(" +
+                    "status TEXT);\n";
+
+    public static final String SQL_CREATE_ENTRIES2 =
+            "Create Table historyClient(" +
                     "fareId TEXT Primary Key, "+
                     "driverName TEXT, " +
                     "driverPhone integer, " +

@@ -14,7 +14,9 @@ import java.util.HashMap;
 
 import static com.example.tomek.uberallescustomer.LogedUserData.newFareEndingPoint;
 import static com.example.tomek.uberallescustomer.LogedUserData.newFareStartingPoint;
-import static com.example.tomek.uberallescustomer.database.FeedReaderContract.SQL_CREATE_ENTRIES;
+
+import static com.example.tomek.uberallescustomer.database.FeedReaderContract.SQL_CREATE_ENTRIES1;
+import static com.example.tomek.uberallescustomer.database.FeedReaderContract.SQL_CREATE_ENTRIES2;
 import static com.example.tomek.uberallescustomer.database.FeedReaderContract.SQL_DELETE_ENTRIES;
 
 
@@ -28,7 +30,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        //db.execSQL(SQL_CREATE_ENTRIES1);
+        db.execSQL(SQL_CREATE_ENTRIES2);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -60,30 +63,30 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     }
 
     public void insertToHistory(SQLiteDatabase db, String id, Driver driver){
-        db.execSQL("insert into historyClient values(" +
-                id + ", '"+
-                driver.getDriverName() + "', '" +
-                driver.getDriverPhone() + "', '" +
+        db.execSQL("insert into historyClient values('" +
+                id + "', '"+
+                driver.getDriverName() + "', " +
+                driver.getDriverPhone() + ", '" +
                 driver.getCarName() + "', '" +
                 driver.getCarPlateNumber() + "')");
     }
 
-    public HashMap<String, Driver> selectDriversByFareId(String fareId){
+    public Driver selectDriversByFareId(String fareId){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("Select * from historyClient where fareId = " + fareId + ";", null);
-        HashMap<String, Driver> map = new HashMap<>();
+        Cursor c = db.rawQuery("Select * from historyClient where fareId = '" + fareId + "';", null);
+        Driver driver = null;
         if(c.moveToFirst()){
             do{
                 String driverName = c.getString(1);
                 int driverPhone = c.getInt(2);
                 String carModel = c.getString(3);
                 String platesNumber = c.getString(4);
-                Driver driver = new Driver(driverName, driverPhone, carModel, platesNumber);
-                map.put(fareId, driver);
+                driver = new Driver(driverName, driverPhone, carModel, platesNumber);
+
             }while (c.moveToNext());
             c.close();
         }
-        return map;
+        return driver;
 
     }
 

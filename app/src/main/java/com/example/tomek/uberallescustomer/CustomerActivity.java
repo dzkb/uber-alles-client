@@ -46,7 +46,7 @@ public class CustomerActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        databaseExample();
+        //databaseExample();
 
         initNavigationView();
         context = getApplicationContext();
@@ -128,6 +128,16 @@ public class CustomerActivity extends AppCompatActivity {
             Log.d("receiver", "Got message: " + message);
 
             Bundle bundle = intent.getExtras();
+            String driverPhone = (String) bundle.get("driverPhone");
+            String driverName = (String) bundle.get("driverName");
+            String carModel = (String) bundle.get("carName");
+            String carPlatesNumber = (String) bundle.get("carPlateNumber");
+            String fareId = (String) bundle.get("id");
+            int phone = Integer.parseInt(driverPhone);
+            Driver driver = new Driver(driverName,phone,carModel,carPlatesNumber);
+            FeedReaderDbHelper helper = new FeedReaderDbHelper(getApplicationContext());
+            helper.insertToHistory(helper.getWritableDatabase(),fareId,driver);
+
             //FeedReaderDbHelper helper = new FeedReaderDbHelper();
             SummaryFragment summaryFragment = new SummaryFragment();
             summaryFragment.setArguments(bundle);
@@ -137,11 +147,13 @@ public class CustomerActivity extends AppCompatActivity {
 
     private void databaseExample () {
         FeedReaderDbHelper helper = new FeedReaderDbHelper(getApplicationContext());
-        Driver driver = new Driver("Janusz", 605631019, "Fiat 125p", "ODF 8000");
-        helper.insertToHistory(helper.getWritableDatabase(),"id123",driver);
+        Driver driver = new Driver("JanuszWONSATY", 605631019, "Fiat 125p", "ODF 8000");
+        helper.insertToHistory(helper.getWritableDatabase(),"id123456",driver);
 
         HashMap<String,Driver> map = new HashMap<>();
-        map=helper.selectDriversByFareId("id123");
+        Driver driver1 = null;
+        driver1 = helper.selectDriversByFareId("id123456");
+        Log.d("HISTORY JANUSZ", driver1.getDriverName());
     }
 
 //
