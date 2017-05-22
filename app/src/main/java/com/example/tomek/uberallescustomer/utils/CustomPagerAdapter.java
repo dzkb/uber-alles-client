@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import com.example.tomek.uberallescustomer.fragments.DriverInformationFragment;
 import com.example.tomek.uberallescustomer.fragments.SummaryMapFragment;
 
-public class CustomPagerAdapter extends FragmentPagerAdapter {
+public class CustomPagerAdapter extends FragmentStatePagerAdapter {
 
     int tabCount;
     Bundle extras;
@@ -20,6 +21,7 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         this.tabCount = tabCount;
         this.extras = extras;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -35,7 +37,8 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
 
                 return driverInformationFragment;
             default:
-                return null;
+                SummaryMapFragment summaryMapFragment1 = new SummaryMapFragment();
+                return summaryMapFragment1;
         }
     }
 
@@ -44,9 +47,16 @@ public class CustomPagerAdapter extends FragmentPagerAdapter {
         return tabCount;
     }
 
+
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        super.destroyItem(container, position, object);
-        int position1 = position;
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        return super.instantiateItem(container, position);
+    }
+
+
 }

@@ -117,4 +117,6 @@ public class SummaryMapFragment extends Fragment {
     public void onPause() {
         super.onPause();
     }
+
+
 }
