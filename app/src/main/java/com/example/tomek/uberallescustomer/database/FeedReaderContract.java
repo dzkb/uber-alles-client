@@ -5,7 +5,7 @@ public class FeedReaderContract {
     private FeedReaderContract() {}
 
     public static final String SQL_CREATE_ENTRIES1 =
-            "CREATE TABLE fares(" +
+            "CREATE TABLE IF NOT EXISTS fares(" +
                     "userPhone integer, " +
                     "fareId TEXT Primary Key, " +
                     "clientName TEXT, " +
@@ -15,7 +15,7 @@ public class FeedReaderContract {
                     "status TEXT);\n";
 
     public static final String SQL_CREATE_ENTRIES2 =
-            "Create Table historyClient(" +
+            "Create Table IF NOT EXISTS historyClient(" +
                     "fareId TEXT Primary Key, "+
                     "driverName TEXT, " +
                     "driverPhone integer, " +

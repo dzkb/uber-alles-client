@@ -69,6 +69,8 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FeedReaderDbHelper helper = new FeedReaderDbHelper(getApplicationContext());
+        helper.onCreate(helper.getWritableDatabase());
         SharedPreferences prefs = getSharedPreferences("com.uberalles", Context.MODE_PRIVATE);
         String auth_id = prefs.getString("Authentication_Id", "");
         String auth_pass = prefs.getString("Authentication_Password", "");

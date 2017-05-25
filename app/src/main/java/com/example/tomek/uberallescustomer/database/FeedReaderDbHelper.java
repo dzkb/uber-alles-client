@@ -30,7 +30,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        //db.execSQL(SQL_CREATE_ENTRIES1);
+        db.execSQL(SQL_CREATE_ENTRIES1);
         db.execSQL(SQL_CREATE_ENTRIES2);
     }
 
