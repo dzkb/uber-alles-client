@@ -77,20 +77,6 @@ public class HistoryFragment extends Fragment {
         super.onPause();
     }
 
-    private ArrayList<Fare> createExampleList() {
-        fares = new ArrayList<>();
-
-        if (FARES_LIST == null) {
-            Point first = new Point(17.1, 20.2);
-            Point second = new Point(27.1, 10.2);
-            FARES_LIST = new HashMap<>();
-            Fare fare = new Fare(first, second, "Szymon Zwoliński", 500700600, "12/03/1016");
-            FARES_LIST.put("-KiQxGUbh-TvcznBn6nX", fare);
-        }
-        return new ArrayList(FARES_LIST.values());
-
-    }
-
     private void openFragment(final Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

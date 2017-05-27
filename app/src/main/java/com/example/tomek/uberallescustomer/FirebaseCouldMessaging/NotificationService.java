@@ -48,7 +48,8 @@ public class NotificationService extends FirebaseMessagingService {
         CMLocalisationUpdate,
         CMFareConfirmation,
         CMFareCancellation,
-        CMFareCompletion
+        CMFareCompletion,
+        CMFareRequest
     }
 
     @Override
@@ -68,13 +69,6 @@ public class NotificationService extends FirebaseMessagingService {
                     LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
                     break;
                 case CMFareConfirmation:
-                    /*uruchomienie popup'a który wyświetli numer telefonu kierowcy który akceptował
-                     * ogólnie po kliknęciu w strzałkę na mapie i przejściu do storny gdzie wyświetla sie szacunkowy
-                      * czas oczekiwania oraz po kliknęciu zamów nie powinno sie przechodzic do podsumowania, tylko
-                      * spowrotem do fragmentu zamawiania jednocześcnie wyświetlajac popup że "twoje zlecenie czeka na potwierdzenie
-                      * przez kierowce (przechowujemy je w shared lub w operacyjnej, zeby je móc potem odczytac) nie bedzie tez
-                      * ono widoczne w historii. dopiero po potwierdzeniu przez kierowce znajdzie sie
-                      * ono w historii gdzie bedzie mozna podejrzec dane kierowcy i miejsce na mapie gdzie sie znajduje aktualne*/
                     String driverPhoneNumber = data.get("driverPhone");
                     String fareId = data.get("id");
                     String driverName = data.get("driverName");
@@ -92,9 +86,6 @@ public class NotificationService extends FirebaseMessagingService {
                     helper.updateById(USER_PHONE, fareId, "confirmed");
                     break;
                 case CMFareCancellation:
-                    /* Notification + uruchomienie popup'a wyświetlającego informacje o anulowaniu
-                    - po obydwu stronach takie samo działanie
-                    */
                     driverPhone = data.get("phoneNumber");
                     String id = data.get("id");
                     String which = data.get("origin");

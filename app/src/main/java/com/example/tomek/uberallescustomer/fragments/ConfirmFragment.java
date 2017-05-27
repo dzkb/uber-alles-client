@@ -29,10 +29,8 @@ import retrofit2.Response;
 import static com.example.tomek.uberallescustomer.LogedUserData.ACTIVE_FARE_ID;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PASSWORD;
 import static com.example.tomek.uberallescustomer.LogedUserData.USER_PHONE;
-import static com.example.tomek.uberallescustomer.LogedUserData.addFare;
 import static com.example.tomek.uberallescustomer.LogedUserData.times;
 import static com.example.tomek.uberallescustomer.fragments.OrderFragment.TimePickerFragment.setTextView;
-import static java.lang.String.format;
 
 public class ConfirmFragment extends Fragment {
 
@@ -95,7 +93,6 @@ public class ConfirmFragment extends Fragment {
             public void onResponse(Call<FareProof> call, Response<FareProof> response) {
                 if (response.isSuccessful()) {
                     ACTIVE_FARE_ID = response.body().getId();
-                    addFare(ACTIVE_FARE_ID, fare);
                     helper.insert(helper.getWritableDatabase(), fare, "new", ACTIVE_FARE_ID);
                     Log.d("OK", "Wszystko spoko - " + ACTIVE_FARE_ID);
                 } else {

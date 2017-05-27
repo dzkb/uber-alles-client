@@ -46,7 +46,8 @@ public class LoginActivity extends AppCompatActivity {
     public void onForgotPasswordTextClick(View v) {
         FeedReaderDbHelper helper = new FeedReaderDbHelper(getApplicationContext());
         //helper.onCreate(helper.getWritableDatabase());
-        //insertExample(helper.getWritableDatabase());
+//        System.out.println(helper.selectByStatus("new", "500"));
+//        System.out.println(helper.selectByStatus("confirmed", "500"));
         Toast.makeText(this, "Forgot password implementation", Toast.LENGTH_SHORT).show();
     }
 

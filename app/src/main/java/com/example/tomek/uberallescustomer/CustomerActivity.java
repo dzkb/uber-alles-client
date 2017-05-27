@@ -155,15 +155,4 @@ public class CustomerActivity extends AppCompatActivity {
         driver1 = helper.selectDriversByFareId("id123456");
         Log.d("HISTORY JANUSZ", driver1.getDriverName());
     }
-
-//
-//    @Override
-//    protected void onDestroy() {
-//        // Unregister since the activity is about to be closed.
-//        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-//        super.onDestroy();
-//    }
-
-
-
 }

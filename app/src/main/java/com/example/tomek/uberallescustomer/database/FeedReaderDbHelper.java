@@ -62,6 +62,13 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         Log.i("Insert INFO", "Dodano przykałdowy rekord do tabeli");
     }
 
+    public void updateExample() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor c = db.rawQuery("UPDATE fares SET status = 'confirmed' WHERE fareId = '-KkCoDVCYXI0DB0DXCnA' and userPhone = 500;", null);
+        c.moveToFirst();
+        c.close();
+    }
+
     public void insertToHistory(SQLiteDatabase db, String id, Driver driver){
         db.execSQL("insert into historyClient values('" +
                 id + "', '"+
@@ -89,8 +96,6 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         return driver;
 
     }
-
-
 
     public HashMap<String, HistorialFare> selectById(String user) {
         SQLiteDatabase db = this.getReadableDatabase();
